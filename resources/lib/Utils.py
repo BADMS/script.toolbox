@@ -102,7 +102,7 @@ def Filter_Pixelate(filterimage, pixels):
     if not xbmcvfs.exists(ADDON_DATA_PATH):
         xbmcvfs.mkdir(ADDON_DATA_PATH)
     md5 = hashlib.md5(filterimage).hexdigest()
-    filename = md5 + "pix" + str(pixels) + ".png"
+    filename = md5 + "pixel" + str(pixels) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
     cachedthumb = xbmc.getCacheThumbName(filterimage)
     xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
