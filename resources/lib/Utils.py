@@ -251,14 +251,14 @@ def Get_Colors(img):
     return imagecolor
 
 
-def image_recolorize(src, black="#000099", white="#99CCFF"):
+def image_recolorize(src, black="#000000", white="#FFFFFF"):
     # img = image_recolorize(img, black="#000000", white="#FFFFFF")
     """
     Returns a recolorized version of the initial image using a two-tone
     approach. The color in the black argument is used to replace black pixels
     and the color in the white argument is used to replace white pixels.
 
-    The defaults set the image to a blue hued image.
+    The defaults set the image to a b/w hued image.
     """
     return ImageOps.colorize(ImageOps.grayscale(src), black, white)
 
