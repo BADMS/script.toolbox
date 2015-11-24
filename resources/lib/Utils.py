@@ -263,6 +263,18 @@ def image_recolorize(src, black="#000000", white="#FFFFFF"):
     return ImageOps.colorize(ImageOps.grayscale(src), black, white)
 
 
+def image_posterize(src, bits="2"):
+    # img = image_recolorize(img, black="#000000", white="#FFFFFF")
+    """
+    Returns a recolorized version of the initial image using a two-tone
+    approach. The color in the black argument is used to replace black pixels
+    and the color in the white argument is used to replace white pixels.
+
+    The defaults set the image to a b/w hued image.
+    """
+    return ImageOps.posterize(src, bits)
+
+
 def log(txt):
     if isinstance(txt, str):
         txt = txt.decode("utf-8")
