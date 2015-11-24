@@ -19,29 +19,6 @@ ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/
 HOME = xbmcgui.Window(10000)
 
 
-class TextViewer_Dialog(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
-
-    def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self)
-        self.text = kwargs.get('text')
-        self.header = kwargs.get('header')
-
-    def onInit(self):
-        self.getControl(1).setLabel(self.header)
-        self.getControl(5).setText(self.text)
-
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-
-    def onClick(self, controlID):
-        pass
-
-    def onFocus(self, controlID):
-        pass
-
-
 def RemoveQuotes(label):
     if label.startswith("'") and label.endswith("'") and len(label) > 2:
         label = label[1:-1]
@@ -51,10 +28,6 @@ def RemoveQuotes(label):
 
 
 def Filter_Image(filterimage, radius):
-    if HOME.getProperty('colorbox_running') != 'True'
-    	if not xbmcvfs.exists(ADDON_DATA_PATH):
-    		xbmcvfs.mkdir(ADDON_DATA_PATH)
-    	HOME.setProperty('colorbox_running', 'True')
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + str(radius) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
@@ -101,10 +74,6 @@ def Filter_Image(filterimage, radius):
 
 
 def Filter_Pixelate(filterimage, pixels):
-    if HOME.getProperty('colorbox_running') != 'True'
-    	if not xbmcvfs.exists(ADDON_DATA_PATH):
-    		xbmcvfs.mkdir(ADDON_DATA_PATH)
-    	HOME.setProperty('colorbox_running', 'True')
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "pixel" + str(pixels) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
@@ -147,10 +116,6 @@ def Filter_Pixelate(filterimage, pixels):
 
 
 def Filter_Twotone(filterimage, black, white):
-    if HOME.getProperty('colorbox_running') != 'True'
-    	if not xbmcvfs.exists(ADDON_DATA_PATH):
-    		xbmcvfs.mkdir(ADDON_DATA_PATH)
-    	HOME.setProperty('colorbox_running', 'True')
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "twotone" + str(black) + str(white) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
@@ -188,6 +153,47 @@ def Filter_Twotone(filterimage, black, white):
         img.save(targetfile)
     else:
         log("pixelated img already created: " + targetfile)
+    return targetfile
+
+
+def Filter_Posterize(filterimage, bits):
+    md5 = hashlib.md5(filterimage).hexdigest()
+    filename = md5 + "posterize" + str(bits) + ".png"
+    targetfile = os.path.join(ADDON_DATA_PATH, filename)
+    cachedthumb = xbmc.getCacheThumbName(filterimage)
+    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
+    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
+    if filterimage == "":
+        return ""
+    if not xbmcvfs.exists(targetfile):
+        img = None
+        for i in range(1, 4):
+            try:
+                if xbmcvfs.exists(xbmc_cache_file):
+                    log("image already in xbmc cache: " + xbmc_cache_file)
+                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
+                    break
+                elif xbmcvfs.exists(xbmc_vid_cache_file):
+                    log("image already in xbmc video cache: " + xbmc_vid_cache_file)
+                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
+                    break
+                else:
+                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
+                    if filterimage.endswith("/"):
+                        filterimage = filterimage[:-1]
+                    log("copy image from source: " + filterimage)
+                    xbmcvfs.copy(filterimage, targetfile)
+                    img = Image.open(targetfile)
+                    break
+            except:
+                log("Could not get image for %s (try %i)" % (filterimage, i))
+                xbmc.sleep(500)
+        if not img:
+            return ""
+        img = image_posterize(img,bits)
+        img.save(targetfile)
+    else:
+        log("posterize img already created: " + targetfile)
     return targetfile
 
 
