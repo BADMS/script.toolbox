@@ -54,6 +54,11 @@ class Main:
 		HOME.setProperty(self.prefix + 'ImageFilter', image)
 		HOME.setProperty(self.prefix + "ImageColor", imagecolor)
 		HOME.setProperty(self.prefix + 'ImageUpdating', '1')
+            elif info == 'twotone':
+		image = Filter_Twotone(self.id, self.black, self.white)
+		log("Twotone image %s with color1 %s color2 %s" % (self.id, self.black, self.white))
+		HOME.setProperty(self.prefix + 'ImageFilter', image)
+		HOME.setProperty(self.prefix + 'ImageUpdating', '1')
 
     def _init_vars(self):
         self.window = xbmcgui.Window(10000)  # Home Window
@@ -64,6 +69,8 @@ class Main:
         self.prefix = ""
         self.radius = 5
         self.pixels = 20
+        self.black = "#000000"
+        self.white = "#FFFFFF"
         self.daemon = False
         self.image_now = ""
         self.image_prev = ""
@@ -91,6 +98,10 @@ class Main:
                 self.radius = int(arg[7:])
             elif arg.startswith('pixels='):
                 self.pixels = int(arg[7:])
+            elif arg.startswith('black='):
+                self.black = int(arg[6:])
+            elif arg.startswith('white='):
+                self.white = int(arg[6:])
 
 
 class colorboxMonitor(xbmc.Monitor):
