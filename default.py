@@ -64,8 +64,8 @@ class Main:
         self.radius = 5
         self.bits = 8
         self.pixels = 20
-        self.black = ""
-        self.white = ""
+        self.black = "#000000"
+        self.white = "#FFFFFF"
         self.daemon = False
         self.autoclose = ""
 
