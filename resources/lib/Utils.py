@@ -51,8 +51,10 @@ def RemoveQuotes(label):
 
 
 def Filter_Image(filterimage, radius):
-    if not xbmcvfs.exists(ADDON_DATA_PATH):
-        xbmcvfs.mkdir(ADDON_DATA_PATH)
+    if HOME.getProperty('colorbox_running') != 'True'
+    	if not xbmcvfs.exists(ADDON_DATA_PATH):
+    		xbmcvfs.mkdir(ADDON_DATA_PATH)
+    	HOME.setProperty('colorbox_running', 'True')
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + str(radius) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
@@ -99,8 +101,10 @@ def Filter_Image(filterimage, radius):
 
 
 def Filter_Pixelate(filterimage, pixels):
-    if not xbmcvfs.exists(ADDON_DATA_PATH):
-        xbmcvfs.mkdir(ADDON_DATA_PATH)
+    if HOME.getProperty('colorbox_running') != 'True'
+    	if not xbmcvfs.exists(ADDON_DATA_PATH):
+    		xbmcvfs.mkdir(ADDON_DATA_PATH)
+    	HOME.setProperty('colorbox_running', 'True')
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "pixel" + str(pixels) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
