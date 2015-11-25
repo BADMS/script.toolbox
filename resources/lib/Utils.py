@@ -163,7 +163,7 @@ def Filter_Twotone(filterimage, black, white):
         img = image_recolorize(img,black,white)
         img.save(targetfile)
     else:
-        log("pixelated img already created: " + targetfile)
+        log("twotone img already created: " + targetfile)
     return targetfile
 
 
