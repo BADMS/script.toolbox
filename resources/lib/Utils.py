@@ -24,10 +24,10 @@ def ColorboxFirstRun():
         if not xbmcvfs.exists(ADDON_DATA_PATH):
             # addon data path does not exist...create it
             xbmcvfs.mkdir(ADDON_DATA_PATH)
-            WINDOW.setProperty('colorbox_initialised', 'True')
+            HOME.setProperty('colorbox_initialised', 'True')
         else: 
             # addon data path exists
-            WINDOW.setProperty('colorbox_initialised', 'True')
+            HOME.setProperty('colorbox_initialised', 'True')
 
 
 def RemoveQuotes(label):
