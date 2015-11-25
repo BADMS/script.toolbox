@@ -37,6 +37,8 @@ class Main:
                 image, imagecolor = Filter_Image(self.id, self.radius)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
+            elif info == 'firstrun':
+                ColorboxFirstRun()
             elif info == 'pixelate':
                 image, imagecolor = Filter_Pixelate(self.id, self.pixels)
                 log("Pixelate image %s with pixels %i" % (self.id, self.pixels))
