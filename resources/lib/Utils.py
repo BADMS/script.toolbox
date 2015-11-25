@@ -208,20 +208,6 @@ def Filter_Posterize(filterimage, bits):
     return targetfile
 
 
-def Pixelate_Image(img, pixelSize=20):
-    backgroundColor = (0,)*3
-    image = img
-    image = image.resize((image.size[0]/pixelSize, image.size[1]/pixelSize), Image.NEAREST)
-    image = image.resize((image.size[0]*pixelSize, image.size[1]*pixelSize), Image.NEAREST)
-    pixel = image.load()
-    for i in range(0,image.size[0],pixelSize):
-      for j in range(0,image.size[1],pixelSize):
-        for r in range(pixelSize):
-          pixel[i+r,j] = backgroundColor
-          pixel[i,j+r] = backgroundColor
-    return image
-
-
 def Get_Colors(img):
     width, height = img.size
     pixels = img.load()
@@ -268,6 +254,20 @@ def Get_Colors(img):
     return imagecolor
 
 
+def Pixelate_Image(img, pixelSize=20):
+    backgroundColor = (0,)*3
+    image = img
+    image = image.resize((image.size[0]/pixelSize, image.size[1]/pixelSize), Image.NEAREST)
+    image = image.resize((image.size[0]*pixelSize, image.size[1]*pixelSize), Image.NEAREST)
+    pixel = image.load()
+    for i in range(0,image.size[0],pixelSize):
+      for j in range(0,image.size[1],pixelSize):
+        for r in range(pixelSize):
+          pixel[i+r,j] = backgroundColor
+          pixel[i,j+r] = backgroundColor
+    return image
+
+
 def image_recolorize(src, black="#000000", white="#FFFFFF"):
     # img = image_recolorize(img, black="#000000", white="#FFFFFF")
     """
@@ -283,11 +283,10 @@ def image_recolorize(src, black="#000000", white="#FFFFFF"):
 def image_posterize(src, bits="2"):
     # img = image_recolorize(img, black="#000000", white="#FFFFFF")
     """
-    Returns a recolorized version of the initial image using a two-tone
-    approach. The color in the black argument is used to replace black pixels
-    and the color in the white argument is used to replace white pixels.
+    Returns a posterized version of the src image.
+    Bits 1-8 define your Atari system decade!
 
-    The defaults set the image to a b/w hued image.
+    The defaults set the image to a 2 bits crushed image.
     """
     return ImageOps.posterize(src, bits)
 
