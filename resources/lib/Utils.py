@@ -98,31 +98,25 @@ def Filter_Pixelate(filterimage, pixels):
         img = None
         for i in range(1, 4):
             try:
-                if xbmcvfs.exists(xbmc_cache_file):
-                    log("image already in xbmc cache: " + xbmc_cache_file)
-                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
+                img = Image.open(xbmc.translatePath(xbmc_cache_file))
+                if img != "":
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    log("image already in xbmc video cache: " + xbmc_vid_cache_file)
                     img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
                     break
                 else:
                     filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
                     if filterimage.endswith("/"):
                         filterimage = filterimage[:-1]
-                    log("copy image from source: " + filterimage)
                     xbmcvfs.copy(filterimage, targetfile)
                     img = Image.open(targetfile)
                     break
             except:
-                log("Could not get image for %s (try %i)" % (filterimage, i))
-                xbmc.sleep(500)
+                xbmc.sleep(100)
         if not img:
             return "", imagecolor
         img = Pixelate_Image(img,pixels)
         img.save(targetfile)
-    else:
-        log("pixelated img already created: " + targetfile)
     return targetfile, imagecolor
 
 

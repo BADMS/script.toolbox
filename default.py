@@ -41,9 +41,9 @@ class Main:
                 ColorboxFirstRun()
             elif info == 'pixelate':
                 image, imagecolor = Filter_Pixelate(self.id, self.pixels)
-                log("Pixelate image %s with pixels %i" % (self.id, self.pixels))
-                HOME.setProperty(self.prefix + 'ImageFilter', image)
-                HOME.setProperty(self.prefix + "ImageColor", imagecolor)
+                if image  != "":
+                    HOME.setProperty(self.prefix + 'ImageFilter', image)
+                    HOME.setProperty(self.prefix + "ImageColor", imagecolor)
                 HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             elif info == 'twotone':
                 image = Filter_Twotone(self.id, self.black, self.white)
