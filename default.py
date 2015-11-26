@@ -31,14 +31,17 @@ class Main:
 
     def _StartInfoActions(self):
         for info in self.infos:
-            if info == 'blur':
+            if info == 'firstrun':
+                ColorboxFirstRun()
+            elif info == 'randomcolor':
+                imagecolor = Random_Color()
+                HOME.setProperty(self.prefix + "ImageColor", imagecolor)
+            elif info == 'blur':
                 HOME.clearProperty(self.prefix + 'ImageFilter')
                 log("Blur image %s with radius %i" % (self.id, self.radius))
                 image, imagecolor = Filter_Image(self.id, self.radius)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
-            elif info == 'firstrun':
-                ColorboxFirstRun()
             elif info == 'pixelate':
                 image, imagecolor = Filter_Pixelate(self.id, self.pixels)
                 if image  != "":
