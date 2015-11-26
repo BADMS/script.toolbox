@@ -54,3 +54,5 @@ script.colorbox
   Window(home).Property(RETURN_IMAGE_ID.Image)
   
   Window(home).Property(RETURN_IMAGE_ID.ImageColor) <- only available with 'blur' and 'randomcolor'
+
+  Window(home).Property(Pixelated.ImageUpdating) <- this will be set to '1' when all operations are finished and image is ready
