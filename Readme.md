@@ -1,5 +1,6 @@
 script.colorbox
 
+
 - Available operations:
 
   twotone: will grayscale the image then replace black and white with colors of choice (or default grayscale if none supplied)
@@ -7,6 +8,7 @@ script.colorbox
   pixelate: will bulk up pixels to size requested and add black border round each pixel block
   blur: will return a guassian blurred image dependant on radius supplied, larger radius means larger blur
   randomcolor: will return a random color
+
 
 - Notes:
 
@@ -22,6 +24,7 @@ script.colorbox
   RunScript(script.colorbox,info=blur,id='"IMAGE_TO_USE"',radius=RADIUS_SIZE,prefix=RETURN_IMAGE_ID)
   RunScript(script.colorbox,info=randomcolor,prefix=RETURN_IMAGE_ID)
 
+
 - Vars:
 
   IMAGE_TO_USE        Image to be manipulated
@@ -32,7 +35,9 @@ script.colorbox
   PIXELATION_SIZE     1-infinity, though 1 will return a 1:1 copy!
   RADIUS_SIZE         The larger the more blurred the returned image
 
+
 - Window properties:
 
   Window(home).Property(RETURN_IMAGE_ID.Image)
+  
   Window(home).Property(RETURN_IMAGE_ID.ImageColor) <- only available with 'blur' and 'randomcolor'
