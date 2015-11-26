@@ -18,6 +18,7 @@ ADDON_LANGUAGE = ADDON.getLocalizedString
 ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID))
 HOME = xbmcgui.Window(10000)
 
+
 def ColorboxFirstRun():
     initdone = HOME.getProperty("colorbox_initialised")
     if not initdone:
@@ -29,6 +30,10 @@ def ColorboxFirstRun():
             # addon data path exists
             HOME.setProperty('colorbox_initialised', 'True')
 
+
+def Random_Color():
+    return "ff" + "%06x" % random.randint(0, 0xFFFFFF)
+    
 
 def RemoveQuotes(label):
     if label.startswith("'") and label.endswith("'") and len(label) > 2:
