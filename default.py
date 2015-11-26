@@ -20,6 +20,8 @@ class Main:
 
     def __init__(self):
         log("version %s started" % ADDON_VERSION)
+        if xbmc.getCondVisibility("Container(518).Scrolling"):
+            return
         self._init_vars()
         self._parse_argv()
         if self.infos:
