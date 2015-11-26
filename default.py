@@ -20,8 +20,6 @@ class Main:
 
     def __init__(self):
         log("version %s started" % ADDON_VERSION)
-        if xbmc.getCondVisibility("Container(518).Scrolling"):
-            return
         self._init_vars()
         self._parse_argv()
         if self.infos:
@@ -60,6 +58,11 @@ class Main:
                 log("Posterize image %s with bits %i" % (self.id, self.bits))
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + 'ImageUpdating', '1')
+            elif info == 'fakelight':
+                image = Filter_Fakelight(self.id, self.pixels)
+                log("Fakelight image %s with tile %i" % (self.id, self.pixels))
+                HOME.setProperty(self.prefix + 'ImageFilter', image)
+                HOME.setProperty(self.prefix + 'ImageUpdating', '1')
 
     def _init_vars(self):
         self.window = xbmcgui.Window(10000)  # Home Window
@@ -69,7 +72,7 @@ class Main:
         self.dbid = ""
         self.prefix = ""
         self.radius = 5
-        self.bits = 8
+        self.bits = 2
         self.pixels = 20
         self.black = "#000000"
         self.white = "#FFFFFF"

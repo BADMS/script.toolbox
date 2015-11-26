@@ -3,12 +3,12 @@ import xbmcaddon
 import xbmcgui
 import xbmcvfs
 import xbmcplugin
-import os
+import os, sys
 import simplejson
 import hashlib
 import urllib
 import random
-from PIL import Image, ImageOps, ImageEnhance
+from PIL import Image, ImageOps, ImageEnhance, ImageDraw, ImageStat
 from ImageOperations import MyGaussianBlur
 from xml.dom.minidom import parse
 
@@ -123,6 +123,41 @@ def Filter_Pixelate(filterimage, pixels):
         img = Pixelate_Image(img,pixels)
         img.save(targetfile)
     return targetfile, imagecolor
+
+
+def Filter_Fakelight(filterimage, pixels):
+    md5 = hashlib.md5(filterimage).hexdigest()
+    filename = md5 + "fakelight" + str(pixels) + ".png"
+    targetfile = os.path.join(ADDON_DATA_PATH, filename)
+    cachedthumb = xbmc.getCacheThumbName(filterimage)
+    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
+    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
+    if filterimage == "":
+        return ""
+    if not xbmcvfs.exists(targetfile):
+        img = None
+        for i in range(1, 4):
+            try:
+                img = Image.open(xbmc.translatePath(xbmc_cache_file))
+                if img != "":
+                    break
+                elif xbmcvfs.exists(xbmc_vid_cache_file):
+                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
+                    break
+                else:
+                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
+                    if filterimage.endswith("/"):
+                        filterimage = filterimage[:-1]
+                    xbmcvfs.copy(filterimage, targetfile)
+                    img = Image.open(targetfile)
+                    break
+            except:
+                xbmc.sleep(100)
+        if not img:
+            return ""
+        img = fake_light(img,pixels)
+        img.save(targetfile)
+    return targetfile
 
 
 def Filter_Twotone(filterimage, black, white):
@@ -295,9 +330,10 @@ def fake_light(img, tilesize=50):
     for x in xrange(0, WIDTH, tilesize):
         for y in xrange(0, HEIGHT, tilesize):
             br = int(255 * (1 - x / float(WIDTH) * y /float(HEIGHT)))
-            tile = img.new("RGBA", (tilesize, tilesize), (255,255,255,128))
+            tile = Image.new("RGBA", (tilesize, tilesize), (255,255,255,128))
             img.paste((br,br,br), (x, y, x + tilesize, y + tilesize), mask=tile)
-            
+    return img            
+
 
 def log(txt):
     if isinstance(txt, str):
