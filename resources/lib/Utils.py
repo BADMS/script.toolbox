@@ -290,6 +290,15 @@ def image_posterize(src, bits="2"):
     return ImageOps.posterize(src, bits)
 
 
+def fake_light(img, tilesize=50):
+    WIDTH, HEIGHT = img.size
+    for x in xrange(0, WIDTH, tilesize):
+        for y in xrange(0, HEIGHT, tilesize):
+            br = int(255 * (1 - x / float(WIDTH) * y /float(HEIGHT)))
+            tile = img.new("RGBA", (tilesize, tilesize), (255,255,255,128))
+            img.paste((br,br,br), (x, y, x + tilesize, y + tilesize), mask=tile)
+            
+
 def log(txt):
     if isinstance(txt, str):
         txt = txt.decode("utf-8")
