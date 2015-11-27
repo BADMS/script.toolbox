@@ -24,8 +24,6 @@ class Main:
         self._parse_argv()
         if self.infos:
             self._StartInfoActions()
-        elif not len(sys.argv) > 1:
-            self._selection_dialog()
         if self.control == "plugin":
             xbmcplugin.endOfDirectory(self.handle)
 
