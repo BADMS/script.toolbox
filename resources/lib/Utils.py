@@ -96,9 +96,8 @@ def Filter_Pixelate(filterimage, pixels):
     cachedthumb = xbmc.getCacheThumbName(filterimage)
     xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
     xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
-    imagecolor = "ff" + "%06x" % random.randint(0, 0xFFFFFF)
     if filterimage == "":
-        return "", imagecolor
+        return ""
     if not xbmcvfs.exists(targetfile):
         img = None
         for i in range(1, 4):
@@ -119,10 +118,10 @@ def Filter_Pixelate(filterimage, pixels):
             except:
                 xbmc.sleep(100)
         if not img:
-            return "", imagecolor
+            return ""
         img = Pixelate_Image(img,pixels)
         img.save(targetfile)
-    return targetfile, imagecolor
+    return targetfile
 
 
 def Filter_Fakelight(filterimage, pixels):
