@@ -34,6 +34,11 @@ class Main:
             elif info == 'randomcolor':
                 imagecolor = Random_Color()
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
+            elif info == 'bluronly':
+                HOME.clearProperty(self.prefix + 'ImageFilter')
+                log("Blur image %s with radius %i" % (self.id, self.radius))
+                image = Filter_ImageOnly(self.id, self.radius)
+                HOME.setProperty(self.prefix + 'ImageFilter', image)
             elif info == 'blur':
                 HOME.clearProperty(self.prefix + 'ImageFilter')
                 log("Blur image %s with radius %i" % (self.id, self.radius))
