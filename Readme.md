@@ -9,7 +9,9 @@ script.colorbox
   
   pixelate: will bulk up pixels to size requested and add black border round each pixel block
   
-  blur: will return a guassian blurred image dependant on radius supplied, larger radius means larger blur
+  blur: will return a guassian blurred image dependant on radius supplied, larger radius means larger blur + color match
+  
+  bluronly: will return a guassian blurred image dependant on radius supplied, larger radius means larger blur - no color match
   
   randomcolor: will return a random color
 
@@ -28,6 +30,8 @@ script.colorbox
   RunScript(script.colorbox,info=pixelate,id='"IMAGE_TO_USE"',pixels=PIXELATION_SIZE,prefix=RETURN_IMAGE_ID)
 
   RunScript(script.colorbox,info=blur,id='"IMAGE_TO_USE"',radius=RADIUS_SIZE,prefix=RETURN_IMAGE_ID)
+
+  RunScript(script.colorbox,info=bluronly,id='"IMAGE_TO_USE"',radius=RADIUS_SIZE,prefix=RETURN_IMAGE_ID)
 
   RunScript(script.colorbox,info=randomcolor,prefix=RETURN_IMAGE_ID)
 
