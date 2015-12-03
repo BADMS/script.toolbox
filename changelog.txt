@@ -1,3 +1,5 @@
+v1.0.3
+- daemon added
 v1.0.2
 - bluronly op no colour
 v1.0.1
