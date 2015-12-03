@@ -60,3 +60,13 @@ script.colorbox
   Window(home).Property(RETURN_IMAGE_ID.ImageColor) <- only available with 'blur' and 'randomcolor'
 
   Window(home).Property(RETURN_IMAGE_ID.ImageUpdating) <- this will be set to '1' when all operations are finished and image is ready
+  
+  Window(home).Property(ImageColor1|2|3) <- available when music playing, 1 is color from art other two are random
+  
+  Window(home).Property(ImageFilter1|2|3) <- available when music playing, 1 is blur, 2 pixel, 3 posterize
+  
+  
+- Daemon startuo.xml (pixels etc will default if not set)
+
+  	<onload condition="System.HasAddon(script.colorbox)">RunScript(script.colorbox,daemon=True,pixels=20,bits=2,radius=1)</onload>
+
