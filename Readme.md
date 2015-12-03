@@ -66,7 +66,7 @@ script.colorbox
   Window(home).Property(ImageFilter1|2|3) <- available when music playing, 1 is blur, 2 pixel, 3 posterize
   
   
-- Daemon startuo.xml (pixels etc will default if not set)
+- Daemon startup.xml (pixels etc will default if not set)
 
   	<onload condition="System.HasAddon(script.colorbox)">RunScript(script.colorbox,daemon=True,pixels=20,bits=2,radius=1)</onload>
 
