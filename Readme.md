@@ -65,8 +65,12 @@ script.colorbox
   
   Window(home).Property(ImageFilter1|2|3) <- available when music playing, 1 is blur, 2 pixel, 3 posterize
   
+  Window(home).Property(ImageColorfa1|2|3) <- available when music playing, 1 is color from art other two are random
   
-- Daemon startup.xml (pixels etc will default if not set)
+  Window(home).Property(ImageFilterfa1|2|3) <- available when music playing, 1 is blur, 2 pixel, 3 posterize
+  
+  
+- Daemon startup.xml (pixels etc will default if not set) will process 'Player.Art(thumb)' & 'MusicPlayer.Property(Fanart_Image)'
 
   	<onload condition="System.HasAddon(script.colorbox)">RunScript(script.colorbox,daemon=True,pixels=20,bits=2,radius=1)</onload>
 
