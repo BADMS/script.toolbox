@@ -18,7 +18,7 @@ script.colorbox
 
 - Notes:
 
-  On first use it will check and make addon cache dir. First run of an image will be slow as it is processing image, then all other calls will use a cached image for extra speed. For this to happen please add this to top of Startup.xml
+  On first use it will check and make addon cache dir. First run of an image will be slow as it is processing image, then all other calls will use a cached image for extra speed. For this to happen please add this to top of Startup.xml, on a button or anywhere it can be run from to start before colorbox is needed.
 
 	<onload condition="System.HasAddon(script.colorbox)">RunScript(script.colorbox,info=firstrun)</onload>
 
