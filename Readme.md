@@ -15,6 +15,10 @@ script.colorbox
   
   randomcolor: will return a random color
 
+  daemon for lisitem fanart, to ignore in viewmodes set window property true (see below)
+
+  daemon for music player fanart
+
 
 - Notes:
 
@@ -71,8 +75,13 @@ script.colorbox
   
   Window(home).Property(ImageFilterfa1|2|3) <- available when music playing, 1 is blur, 2 pixel, 3 posterize
   
+  Window(home).Property(ImageColorcfa1|2|3) <- available current list item fanart, 1 is color from art other two are random
+  
+  Window(home).Property(ImageFiltercfa1|2|3) <- available current list item fanart, 1 is blur, 2 pixel, 3 posterize
+
+  Window(home).Property(cfa_ignore_set) <- set True to ignore listitem fanart (remember to clear if needed!)
+  
   
 - Daemon startup.xml (pixels etc will default if not set) will process 'Player.Art(thumb)' & 'MusicPlayer.Property(Fanart_Image)'
 
   	<onload condition="System.HasAddon(script.colorbox)">RunScript(script.colorbox,daemon=True,pixels=20,bits=2,radius=1)</onload>
-
