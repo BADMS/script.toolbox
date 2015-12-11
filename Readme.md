@@ -22,9 +22,9 @@ script.colorbox
 
 - Notes:
 
-  On first use it will check and make addon cache dir. First run of an image will be slow as it is processing image, then all other calls will use a cached image for extra speed. For this to happen please add this to top of Startup.xml, on a button or anywhere it can be run from to start before colorbox is needed.
+  On first you will need it to check and make addon cache dir. For this to happen please add this to top of Startup.xml, on a button or anywhere it can be run from to start before colorbox is needed.
 
-	<onload condition="System.HasAddon(script.colorbox)">RunScript(script.colorbox,info=firstrun)</onload>
+	RunScript(script.colorbox,info=firstrun)
 
 
 - Usage:
@@ -65,7 +65,7 @@ script.colorbox
   
   Window(home).Property(RETURN_IMAGE_ID.ImageColor) <- only available with 'blur' and 'randomcolor'
 
-  Window(home).Property(RETURN_IMAGE_ID.ImageUpdating) <- this will be set to '1' when all operations are finished and image is ready
+  Window(home).Property(RETURN_IMAGE_ID.ImageUpdating) <- this will be set to '1' when all operations are finished and image is ready. It will be set to '0' whle image is being rendered.
   
   Window(home).Property(ImageColor1|2|3) <- available when music playing, 1 is color from art other two are random
   
