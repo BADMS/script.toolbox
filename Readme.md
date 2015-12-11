@@ -22,7 +22,7 @@ script.colorbox
 
 - Notes:
 
-  On first you will need it to check and make addon cache dir. For this to happen please add this to top of Startup.xml, on a button or anywhere it can be run from to start before colorbox is needed.
+  On start up you will need to check and make addon cache dir. For this to happen please add this to top of Startup.xml for example, on a button or anywhere it can be run from to start before colorbox is needed.
 
 	RunScript(script.colorbox,info=firstrun)
 
