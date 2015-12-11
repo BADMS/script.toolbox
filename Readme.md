@@ -82,6 +82,8 @@ script.colorbox
   Window(home).Property(cfa_ignore_set) <- set True to ignore listitem fanart (remember to clear if needed!)
   
   
-- Daemon startup.xml (pixels etc will default if not set) will process 'Player.Art(thumb)' & 'MusicPlayer.Property(Fanart_Image)'
+- Daemon:
 
-  	<onload condition="System.HasAddon(script.colorbox)">RunScript(script.colorbox,daemon=True,pixels=20,bits=2,radius=1)</onload>
+  In say startup.xml use below code to start daemon (pixels etc will default if not set). This will process 'Player.Art(thumb)', 'MusicPlayer.Property(Fanart_Image)' & current 'Listitem.Fanart'.
+
+  	RunScript(script.colorbox,daemon=True,pixels=20,bits=2,radius=1)
