@@ -146,8 +146,9 @@ def Filter_Pixelate(filterimage, pixels):
         img = None
         for i in range(1, 4):
             try:
-                img = Image.open(xbmc.translatePath(xbmc_cache_file))
-                if img != "":
+                if xbmcvfs.exists(xbmc_cache_file):
+                    log("image already in xbmc cache: " + xbmc_cache_file)
+                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
                     img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
@@ -181,8 +182,9 @@ def Filter_Fakelight(filterimage, pixels):
         img = None
         for i in range(1, 4):
             try:
-                img = Image.open(xbmc.translatePath(xbmc_cache_file))
-                if img != "":
+                if xbmcvfs.exists(xbmc_cache_file):
+                    log("image already in xbmc cache: " + xbmc_cache_file)
+                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
                     img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
