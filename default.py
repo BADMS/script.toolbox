@@ -43,6 +43,9 @@ class Main:
                     image = Filter_Posterize(self.image_now_cfa, self.bits)
                     HOME.setProperty(self.prefix + 'ImageFiltercfa3', image)
                     HOME.setProperty(self.prefix + "ImageColorcfa3", Random_Color())
+                    image = Filter_Distort(self.image_now_cfa, self.delta_x, self.delta_y)
+                    HOME.setProperty(self.prefix + 'ImageFiltercfa4', image)
+                    HOME.setProperty(self.prefix + "ImageColorcfa4", Random_Color())
                     HOME.setProperty(self.prefix + 'ImageUpdating', '1')
                 except:
                     log("Could not process image for daemon")
@@ -116,6 +119,11 @@ class Main:
                 log("Fakelight image %s with tile %i" % (self.id, self.pixels))
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + 'ImageUpdating', '1')
+            elif info == 'distort':
+                image = Filter_Distort(self.id, self.delta_x, self.delta_y)
+                log("Distort image %s with x,y %i %i" % (self.id, self.delta_x, self.delta_y))
+                HOME.setProperty(self.prefix + 'ImageFilter', image)
+                HOME.setProperty(self.prefix + 'ImageUpdating', '1')
 
     def _init_vars(self):
         self.window = xbmcgui.Window(10000)  # Home Window
@@ -130,6 +138,8 @@ class Main:
         self.container = 518
         self.black = "#000000"
         self.white = "#FFFFFF"
+        self.delta_x = 50
+        self.delta_y = 90
         self.daemon = False
         self.image_now = ""
         self.image_now_fa = ""
@@ -168,6 +178,10 @@ class Main:
                 self.black = RemoveQuotes(arg[6:])
             elif arg.startswith('white='):
                 self.white = RemoveQuotes(arg[6:])
+            elif arg.startswith('delta_x='):
+                self.delta_x = int(arg[8:])
+            elif arg.startswith('delta_y='):
+                self.delta_y = int(arg[8:])
             elif arg.startswith('container='):
                 self.container = RemoveQuotes(arg[10:])
 
