@@ -51,8 +51,8 @@ class Main:
                         HOME.setProperty(self.prefix + 'ImageFiltercfa4', image)
                         HOME.setProperty(self.prefix + "ImageColorcfa4", Random_Color())
                 except:
-                    HOME.setProperty(self.prefix + 'ImageUpdating', '1')
                     log("Could not process image for daemon")
+                HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             if self.image_now != self.image_prev and xbmc.Player().isPlayingAudio():
                 try:
                     self.image_prev = self.image_now
