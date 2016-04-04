@@ -34,20 +34,24 @@ class Main:
                 try:
                     self.image_prev_cfa = self.image_now_cfa
                     HOME.setProperty(self.prefix + 'ImageUpdating', '0')
-                    image, imagecolor = Filter_Image(self.image_now_cfa, self.radius)
-                    HOME.setProperty(self.prefix + 'ImageFiltercfa1', image)
-                    HOME.setProperty(self.prefix + "ImageColorcfa1", imagecolor)
-                    image = Filter_Pixelate(self.image_now_cfa, self.pixels)
-                    HOME.setProperty(self.prefix + 'ImageFiltercfa2', image)
-                    HOME.setProperty(self.prefix + "ImageColorcfa2", Random_Color())
-                    image = Filter_Posterize(self.image_now_cfa, self.bits)
-                    HOME.setProperty(self.prefix + 'ImageFiltercfa3', image)
-                    HOME.setProperty(self.prefix + "ImageColorcfa3", Random_Color())
-                    image = Filter_Distort(self.image_now_cfa, self.delta_x, self.delta_y)
-                    HOME.setProperty(self.prefix + 'ImageFiltercfa4', image)
-                    HOME.setProperty(self.prefix + "ImageColorcfa4", Random_Color())
-                    HOME.setProperty(self.prefix + 'ImageUpdating', '1')
+                    if HOME.getProperty("cfa_daemon_set") == 'Blur':
+                        image, imagecolor = Filter_Image(self.image_now_cfa, self.radius)
+                        HOME.setProperty(self.prefix + 'ImageFiltercfa1', image)
+                        HOME.setProperty(self.prefix + "ImageColorcfa1", imagecolor)
+                    elif HOME.getProperty("cfa_daemon_set") == 'Pixelate':
+                        image = Filter_Pixelate(self.image_now_cfa, self.pixels)
+                        HOME.setProperty(self.prefix + 'ImageFiltercfa2', image)
+                        HOME.setProperty(self.prefix + "ImageColorcfa2", Random_Color())
+                    elif HOME.getProperty("cfa_daemon_set") == 'Posterize':
+                        image = Filter_Posterize(self.image_now_cfa, self.bits)
+                        HOME.setProperty(self.prefix + 'ImageFiltercfa3', image)
+                        HOME.setProperty(self.prefix + "ImageColorcfa3", Random_Color())
+                    elif HOME.getProperty("cfa_daemon_set") == 'Distort':
+                        image = Filter_Distort(self.image_now_cfa, self.delta_x, self.delta_y)
+                        HOME.setProperty(self.prefix + 'ImageFiltercfa4', image)
+                        HOME.setProperty(self.prefix + "ImageColorcfa4", Random_Color())
                 except:
+                    HOME.setProperty(self.prefix + 'ImageUpdating', '1')
                     log("Could not process image for daemon")
             if self.image_now != self.image_prev and xbmc.Player().isPlayingAudio():
                 try:
