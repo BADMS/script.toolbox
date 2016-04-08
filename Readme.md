@@ -9,7 +9,7 @@ script.colorbox
   
   pixelate: will bulk up pixels to size requested and add black border round each pixel block
   
-  distort: will fuzzy spread image
+  distort: will fuzzy spread image using two deltas, x & y.
   
   blur: will return a guassian blurred image dependant on radius supplied, larger radius means larger blur + color match
   
@@ -36,6 +36,8 @@ script.colorbox
   RunScript(script.colorbox,info=posterize,id='"IMAGE_TO_USE"',bits=BIT_SIZE,prefix=RETURN_IMAGE_ID)
 
   RunScript(script.colorbox,info=pixelate,id='"IMAGE_TO_USE"',pixels=PIXELATION_SIZE,prefix=RETURN_IMAGE_ID)
+  
+  RunScript(script.colorbox,info=distort,id='"IMAGE_TO_USE"',delta_x=DELTA_X,delta_y=DELTA_Y,prefix=RETURN_IMAGE_ID)
 
   RunScript(script.colorbox,info=blur,id='"IMAGE_TO_USE"',radius=RADIUS_SIZE,prefix=RETURN_IMAGE_ID)
 
@@ -59,6 +61,8 @@ script.colorbox
   PIXELATION_SIZE     1-infinity, though 1 will return a 1:1 copy!
 
   RADIUS_SIZE         The larger the more blurred the returned image
+  
+  DELTA_X/Y           Lower the delta for high distortion, higher delta for low distortion
 
 
 - Window properties:
