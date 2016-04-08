@@ -96,10 +96,10 @@ script.colorbox
 
   To speed up daemon and not to process all types off effects, use:
   
-SetProperty(cfa_daemon_set,Blur,home)
-SetProperty(cfa_daemon_set,Pixelate,home)
-SetProperty(cfa_daemon_set,Posterize,home)
-SetProperty(cfa_daemon_set,Distort,home)
+  SetProperty(cfa_daemon_set,Blur,home)
+  SetProperty(cfa_daemon_set,Pixelate,home)
+  SetProperty(cfa_daemon_set,Posterize,home)
+  SetProperty(cfa_daemon_set,Distort,home)
 
   This MUST be used as of now.
   NONE will be processed if not set.
