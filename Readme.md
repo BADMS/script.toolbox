@@ -9,6 +9,8 @@ script.colorbox
   
   pixelate: will bulk up pixels to size requested and add black border round each pixel block
   
+  distort: will fuzzy spread image
+  
   blur: will return a guassian blurred image dependant on radius supplied, larger radius means larger blur + color match
   
   bluronly: will return a guassian blurred image dependant on radius supplied, larger radius means larger blur - no color match
