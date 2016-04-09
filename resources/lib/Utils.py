@@ -58,23 +58,23 @@ def Filter_Image(filterimage, radius):
         for i in range(1, 4):
             try:
                 if xbmcvfs.exists(xbmc_cache_file):
-                    log("image already in xbmc cache: " + xbmc_cache_file)
+                    
                     img = Image.open(xbmc.translatePath(xbmc_cache_file))
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    log("image already in xbmc video cache: " + xbmc_vid_cache_file)
+                    
                     img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
                     break
                 else:
                     filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
                     if filterimage.endswith("/"):
                         filterimage = filterimage[:-1]
-                    log("copy image from source: " + filterimage)
+                    
                     xbmcvfs.copy(filterimage, targetfile)
                     img = Image.open(targetfile)
                     break
             except:
-                log("Could not get image for %s (try %i)" % (filterimage, i))
+                
                 xbmc.sleep(300)
         if not img:
             return "", ""
@@ -84,7 +84,6 @@ def Filter_Image(filterimage, radius):
         img = img.filter(imgfilter)
         img.save(targetfile)
     else:
-        log("blurred img already created: " + targetfile)
         img = Image.open(targetfile)
     imagecolor = Get_Colors(img)
     return targetfile, imagecolor
@@ -104,23 +103,23 @@ def Filter_ImageOnly(filterimage, radius):
         for i in range(1, 4):
             try:
                 if xbmcvfs.exists(xbmc_cache_file):
-                    log("image already in xbmc cache: " + xbmc_cache_file)
+                    
                     img = Image.open(xbmc.translatePath(xbmc_cache_file))
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    log("image already in xbmc video cache: " + xbmc_vid_cache_file)
+                    
                     img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
                     break
                 else:
                     filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
                     if filterimage.endswith("/"):
                         filterimage = filterimage[:-1]
-                    log("copy image from source: " + filterimage)
+                    
                     xbmcvfs.copy(filterimage, targetfile)
                     img = Image.open(targetfile)
                     break
             except:
-                log("Could not get image for %s (try %i)" % (filterimage, i))
+                
                 xbmc.sleep(300)
         if not img:
             return ""
@@ -129,8 +128,6 @@ def Filter_ImageOnly(filterimage, radius):
         imgfilter = MyGaussianBlur(radius=radius)
         img = img.filter(imgfilter)
         img.save(targetfile)
-    else:
-        log("blurred img already created: " + targetfile)
     return targetfile
 
 
@@ -148,7 +145,7 @@ def Filter_Pixelate(filterimage, pixels):
         for i in range(1, 4):
             try:
                 if xbmcvfs.exists(xbmc_cache_file):
-                    log("image already in xbmc cache: " + xbmc_cache_file)
+                    
                     img = Image.open(xbmc.translatePath(xbmc_cache_file))
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
@@ -184,7 +181,7 @@ def Filter_Fakelight(filterimage, pixels):
         for i in range(1, 4):
             try:
                 if xbmcvfs.exists(xbmc_cache_file):
-                    log("image already in xbmc cache: " + xbmc_cache_file)
+                    
                     img = Image.open(xbmc.translatePath(xbmc_cache_file))
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
@@ -220,30 +217,28 @@ def Filter_Twotone(filterimage, black, white):
         for i in range(1, 4):
             try:
                 if xbmcvfs.exists(xbmc_cache_file):
-                    log("image already in xbmc cache: " + xbmc_cache_file)
+                    
                     img = Image.open(xbmc.translatePath(xbmc_cache_file))
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    log("image already in xbmc video cache: " + xbmc_vid_cache_file)
+                    
                     img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
                     break
                 else:
                     filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
                     if filterimage.endswith("/"):
                         filterimage = filterimage[:-1]
-                    log("copy image from source: " + filterimage)
+                    
                     xbmcvfs.copy(filterimage, targetfile)
                     img = Image.open(targetfile)
                     break
             except:
-                log("Could not get image for %s (try %i)" % (filterimage, i))
+                
                 xbmc.sleep(300)
         if not img:
             return ""
         img = image_recolorize(img,black,white)
         img.save(targetfile)
-    else:
-        log("twotone img already created: " + targetfile)
     return targetfile
 
 
@@ -261,30 +256,28 @@ def Filter_Posterize(filterimage, bits):
         for i in range(1, 4):
             try:
                 if xbmcvfs.exists(xbmc_cache_file):
-                    log("image already in xbmc cache: " + xbmc_cache_file)
+                    
                     img = Image.open(xbmc.translatePath(xbmc_cache_file))
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    log("image already in xbmc video cache: " + xbmc_vid_cache_file)
+                    
                     img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
                     break
                 else:
                     filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
                     if filterimage.endswith("/"):
                         filterimage = filterimage[:-1]
-                    log("copy image from source: " + filterimage)
+                    
                     xbmcvfs.copy(filterimage, targetfile)
                     img = Image.open(targetfile)
                     break
             except:
-                log("Could not get image for %s (try %i)" % (filterimage, i))
+                
                 xbmc.sleep(300)
         if not img:
             return ""
         img = image_posterize(img,bits)
         img.save(targetfile)
-    else:
-        log("posterize img already created: " + targetfile)
     return targetfile
 
 
@@ -302,30 +295,28 @@ def Filter_Distort(filterimage, delta_x, delta_y):
         for i in range(1, 4):
             try:
                 if xbmcvfs.exists(xbmc_cache_file):
-                    log("image already in xbmc cache: " + xbmc_cache_file)
+                    
                     img = Image.open(xbmc.translatePath(xbmc_cache_file))
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    log("image already in xbmc video cache: " + xbmc_vid_cache_file)
+                    
                     img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
                     break
                 else:
                     filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
                     if filterimage.endswith("/"):
                         filterimage = filterimage[:-1]
-                    log("copy image from source: " + filterimage)
+                    
                     xbmcvfs.copy(filterimage, targetfile)
                     img = Image.open(targetfile)
                     break
             except:
-                log("Could not get image for %s (try %i)" % (filterimage, i))
+                
                 xbmc.sleep(300)
         if not img:
             return ""
         img = image_distort(img,delta_x,delta_y)
         img.save(targetfile)
-    else:
-        log("distort img already created: " + targetfile)
     return targetfile
 
 
@@ -371,7 +362,6 @@ def Get_Colors(img):
         imagecolor = "FF%s%s%s" % (format(rAvg, '02x'), format(gAvg, '02x'), format(bAvg, '02x'))
     else:
         imagecolor = "FFF0F0F0"
-    log("Average Color: " + imagecolor)
     return imagecolor
 
 

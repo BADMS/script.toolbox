@@ -97,7 +97,6 @@ class Main:
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
             elif info == 'blur':
                 HOME.clearProperty(self.prefix + 'ImageFilter')
-                log("Blur image %s with radius %i" % (self.id, self.radius))
                 image, imagecolor = Filter_Image(self.id, self.radius)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
@@ -110,22 +109,18 @@ class Main:
                 HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             elif info == 'twotone':
                 image = Filter_Twotone(self.id, self.black, self.white)
-                log("Twotone image %s with color1 %s color2 %s" % (self.id, self.black, self.white))
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             elif info == 'posterize':
                 image = Filter_Posterize(self.id, self.bits)
-                log("Posterize image %s with bits %i" % (self.id, self.bits))
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             elif info == 'fakelight':
                 image = Filter_Fakelight(self.id, self.pixels)
-                log("Fakelight image %s with tile %i" % (self.id, self.pixels))
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             elif info == 'distort':
                 image = Filter_Distort(self.id, self.delta_x, self.delta_y)
-                log("Distort image %s with x,y %i %i" % (self.id, self.delta_x, self.delta_y))
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + 'ImageUpdating', '1')
 
@@ -157,7 +152,6 @@ class Main:
         args = sys.argv
         for arg in args:
             arg = arg.replace("'\"", "").replace("\"'", "")
-            log(arg)
             if arg == 'script.colorbox':
                 continue
             elif arg.startswith('info='):
