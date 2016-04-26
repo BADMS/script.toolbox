@@ -92,7 +92,7 @@ script.colorbox
 
   In say startup.xml use below code to start daemon (pixels etc will default if not set). This will process 'Player.Art(thumb)', 'MusicPlayer.Property(Fanart_Image)' & current 'Listitem.Fanart'. See above 'cfa_ignore_set' to disable the current fanart option.
 
-  	RunScript(script.colorbox,daemon=True,pixels=20,bits=2,radius=10)
+  RunScript(script.colorbox,daemon=True,pixels=20,bits=2,radius=10,delta_x=40,delta_y=90)
 
   To speed up daemon and not to process all types off effects, use:
   
