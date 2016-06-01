@@ -1,3 +1,5 @@
+v2.0.0
+- major overhaul see readme
 v1.0.11
 - add current poster to daemon
 v1.0.8
