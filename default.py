@@ -33,6 +33,14 @@ class Main:
             self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(poster)")
             if self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(season.poster)") != '':
                 self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(season.poster)")
+            elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(tvshow.poster)") != '':
+                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(tvshow.poster)")
+            elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(thumb)") != '':
+                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(thumb)")
+            elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Icon") != '':
+                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Icon")
+            elif self.image_now_cpa == '' and HOME.getProperty("cpa_daemon_fallback") != '':
+                self.image_now_cpa = HOME.getProperty("cpa_daemon_fallback")
             if not HOME.getProperty("cpa_daemon_set") == 'None' and self.image_now_cpa != self.image_prev_cpa:
                 try:
                     self.image_prev_cpa = self.image_now_cpa
@@ -55,6 +63,7 @@ class Main:
                         HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
                 except:
                     log("Could not process image for cpa daemon")
+                HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             if not HOME.getProperty("cfa_daemon_set") == 'None' and self.image_now_cfa != self.image_prev_cfa:
                 try:
                     self.image_prev_cfa = self.image_now_cfa
