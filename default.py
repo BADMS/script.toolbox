@@ -31,6 +31,10 @@ class Main:
             self.image_now_fa = xbmc.getInfoLabel("MusicPlayer.Property(Fanart_Image)")
             self.image_now_cfa = xbmc.getInfoLabel("ListItem.Art(fanart)")
             self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(poster)")
+            if xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,episode)"):
+                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(thumb)")
+            if xbmc.getCondVisibility("Window.IsActive(movieinformation)") and xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,episode)"):
+                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(poster)")
             if self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(season.poster)") != '':
                 self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(season.poster)")
             elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(tvshow.poster)") != '':
