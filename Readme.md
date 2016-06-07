@@ -83,7 +83,7 @@ script.colorbox
   
   Window(home).Property(ImageColorcfa) <- available current fanart if cfa_ignore_set is set, Blur returns overall color others are random
 
-  Window(home).Property(ImageColorcpa) <- available current fanart if cpa_ignore_set is set, Blur returns overall color others are random
+  Window(home).Property(ImageColorcpa) <- available current poster if cpa_ignore_set is set, Blur returns overall color others are random
   
   Window(home).Property(ImageFiltercfa) <- available current fanart if cfa_ignore_set is set
 
