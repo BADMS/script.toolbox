@@ -81,32 +81,21 @@ script.colorbox
   
   Window(home).Property(ImageFilterfa1|2|3) <- available when music playing, 1 is blur, 2 pixel, 3 posterize
   
-  Window(home).Property(ImageColorcfa1|2|3|4) <- available current list item fanart, 1 is color from art other three are random
-  
-  Window(home).Property(ImageFiltercfa1|2|3|4) <- available current list item fanart, 1 is blur, 2 pixel, 3 posterize & 4 distort
+  Window(home).Property(ImageColorcfa) <- available current fanart if cfa_ignore_set is set, Blur returns overall color others are random
 
-  Window(home).Property(ImageFiltercpa) <- available current list item poster, distort only
-
-  Window(home).Property(cfa_ignore_set) <- set True for daemon to ignore listitem fanart (remember to clear if needed!)
+  Window(home).Property(ImageColorcpa) <- available current fanart if cpa_ignore_set is set, Blur returns overall color others are random
   
-  Window(home).Property(cpa_ignore_set) <- set True for daemon to ignore listitem poster (remember to clear if needed!)
+  Window(home).Property(ImageFiltercfa) <- available current fanart if cfa_ignore_set is set
+
+  Window(home).Property(ImageFiltercpa) <- available current poster if cpa_ignore_set is set
+
+  Window(home).Property(cfa_ignore_set) <- set 'None' for daemon to ignore fanart or Blur|Distort|Posterize|Pixelate
+  
+  Window(home).Property(cpa_ignore_set) <- set 'None' for daemon to ignore poster or Blur|Distort|Posterize|Pixelate
   
   
 - Daemon:
 
-  In say startup.xml use below code to start daemon (pixels etc will default if not set). This will process 'Player.Art(thumb)', 'MusicPlayer.Property(Fanart_Image)' & current 'Listitem.Fanart'. See above 'cfa_ignore_set' to disable the current fanart option.
+  In say startup.xml use below code to start daemon (pixels= etc will default if not set).
 
   RunScript(script.colorbox,daemon=True,pixels=20,bits=2,radius=10,delta_x=40,delta_y=90)
-
-  To speed up daemon and not to process all types off effects, use:
-  
-  SetProperty(cfa_daemon_set,Blur,home)
-  
-  SetProperty(cfa_daemon_set,Pixelate,home)
-  
-  SetProperty(cfa_daemon_set,Posterize,home)
-  
-  SetProperty(cfa_daemon_set,Distort,home)
-  
-  This MUST be used as of now.
-  NONE will be processed if not set.

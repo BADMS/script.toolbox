@@ -65,6 +65,10 @@ class Main:
                         image = Filter_Distort(self.image_now_cpa, self.delta_x, self.delta_y)
                         HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
                         HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                    elif HOME.getProperty("cpa_daemon_set") == 'Two tone':
+                        image = Filter_Twotone(self.image_now_cpa, self.black, self.white)
+                        HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                        HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
                 except:
                     log("Could not process image for cpa daemon")
                 HOME.setProperty(self.prefix + 'ImageUpdating', '1')
@@ -86,6 +90,10 @@ class Main:
                         HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
                     elif HOME.getProperty("cfa_daemon_set") == 'Distort':
                         image = Filter_Distort(self.image_now_cfa, self.delta_x, self.delta_y)
+                        HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                        HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                    elif HOME.getProperty("cfa_daemon_set") == 'Two tone':
+                        image = Filter_Twotone(self.id, self.black, self.white)
                         HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
                         HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
                 except:
