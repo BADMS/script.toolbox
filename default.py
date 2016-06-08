@@ -27,78 +27,80 @@ class Main:
         if self.control == "plugin":
             xbmcplugin.endOfDirectory(self.handle)
         while self.daemon and not xbmc.abortRequested:
+            if not HOME.getProperty("cpa_daemon_set") == 'None':
+                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(poster)")
+                if xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,episode)"):
+                    self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(thumb)")
+                if xbmc.getCondVisibility("Window.IsActive(movieinformation)") and xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,episode)"):
+                    self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(poster)")
+                if self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(season.poster)") != '':
+                    self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(season.poster)")
+                elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(tvshow.poster)") != '':
+                    self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(tvshow.poster)")
+                elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(thumb)") != '':
+                    self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(thumb)")
+                elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Icon") != '':
+                    self.image_now_cpa = xbmc.getInfoLabel("ListItem.Icon")
+                elif self.image_now_cpa == '' and HOME.getProperty("cpa_daemon_fallback") != '':
+                    self.image_now_cpa = HOME.getProperty("cpa_daemon_fallback")
+                if self.image_now_cpa != self.image_prev_cpa:
+                    try:
+                        self.image_prev_cpa = self.image_now_cpa
+                        HOME.setProperty(self.prefix + 'ImageUpdating', '0')
+                        if HOME.getProperty("cpa_daemon_set") == 'Blur':
+                            image, imagecolor = Filter_Image(self.image_now_cpa, self.radius)
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", imagecolor)
+                        elif HOME.getProperty("cpa_daemon_set") == 'Pixelate':
+                            image = Filter_Pixelate(self.image_now_cpa, self.pixels)
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                        elif HOME.getProperty("cpa_daemon_set") == 'Posterize':
+                            image = Filter_Posterize(self.image_now_cpa, self.bits)
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                        elif HOME.getProperty("cpa_daemon_set") == 'Distort':
+                            image = Filter_Distort(self.image_now_cpa, self.delta_x, self.delta_y)
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                        elif HOME.getProperty("cpa_daemon_set") == 'Two tone':
+                            image = Filter_Twotone(self.image_now_cpa, self.black, self.white)
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                    except:
+                        log("Could not process image for cpa daemon")
+                    HOME.setProperty(self.prefix + 'ImageUpdating', '1')
+            if not HOME.getProperty("cfa_daemon_set") == 'None':
+                self.image_now_cfa = xbmc.getInfoLabel("ListItem.Art(fanart)")
+                if not HOME.getProperty("cfa_daemon_set") == 'None' and self.image_now_cfa != self.image_prev_cfa:
+                    try:
+                        self.image_prev_cfa = self.image_now_cfa
+                        HOME.setProperty(self.prefix + 'ImageUpdating', '0')
+                        if HOME.getProperty("cfa_daemon_set") == 'Blur':
+                            image, imagecolor = Filter_Image(self.image_now_cfa, self.radius)
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", imagecolor)
+                        elif HOME.getProperty("cfa_daemon_set") == 'Pixelate':
+                            image = Filter_Pixelate(self.image_now_cfa, self.pixels)
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                        elif HOME.getProperty("cfa_daemon_set") == 'Posterize':
+                            image = Filter_Posterize(self.image_now_cfa, self.bits)
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                        elif HOME.getProperty("cfa_daemon_set") == 'Distort':
+                            image = Filter_Distort(self.image_now_cfa, self.delta_x, self.delta_y)
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                        elif HOME.getProperty("cfa_daemon_set") == 'Two tone':
+                            image = Filter_Twotone(self.image_now_cfa, self.black, self.white)
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                    except:
+                        log("Could not process image for cfa daemon")
+                    HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             self.image_now = xbmc.getInfoLabel("Player.Art(thumb)")
             self.image_now_fa = xbmc.getInfoLabel("MusicPlayer.Property(Fanart_Image)")
-            self.image_now_cfa = xbmc.getInfoLabel("ListItem.Art(fanart)")
-            self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(poster)")
-            if xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,episode)"):
-                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(thumb)")
-            if xbmc.getCondVisibility("Window.IsActive(movieinformation)") and xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,episode)"):
-                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(poster)")
-            if self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(season.poster)") != '':
-                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(season.poster)")
-            elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(tvshow.poster)") != '':
-                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(tvshow.poster)")
-            elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(thumb)") != '':
-                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(thumb)")
-            elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Icon") != '':
-                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Icon")
-            elif self.image_now_cpa == '' and HOME.getProperty("cpa_daemon_fallback") != '':
-                self.image_now_cpa = HOME.getProperty("cpa_daemon_fallback")
-            if not HOME.getProperty("cpa_daemon_set") == 'None' and self.image_now_cpa != self.image_prev_cpa:
-                try:
-                    self.image_prev_cpa = self.image_now_cpa
-                    HOME.setProperty(self.prefix + 'ImageUpdating', '0')
-                    if HOME.getProperty("cpa_daemon_set") == 'Blur':
-                        image, imagecolor = Filter_Image(self.image_now_cpa, self.radius)
-                        HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
-                        HOME.setProperty(self.prefix + "ImageColorcpa", imagecolor)
-                    elif HOME.getProperty("cpa_daemon_set") == 'Pixelate':
-                        image = Filter_Pixelate(self.image_now_cpa, self.pixels)
-                        HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
-                        HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
-                    elif HOME.getProperty("cpa_daemon_set") == 'Posterize':
-                        image = Filter_Posterize(self.image_now_cpa, self.bits)
-                        HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
-                        HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
-                    elif HOME.getProperty("cpa_daemon_set") == 'Distort':
-                        image = Filter_Distort(self.image_now_cpa, self.delta_x, self.delta_y)
-                        HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
-                        HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
-                    elif HOME.getProperty("cpa_daemon_set") == 'Two tone':
-                        image = Filter_Twotone(self.image_now_cpa, self.black, self.white)
-                        HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
-                        HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
-                except:
-                    log("Could not process image for cpa daemon")
-                HOME.setProperty(self.prefix + 'ImageUpdating', '1')
-            if not HOME.getProperty("cfa_daemon_set") == 'None' and self.image_now_cfa != self.image_prev_cfa:
-                try:
-                    self.image_prev_cfa = self.image_now_cfa
-                    HOME.setProperty(self.prefix + 'ImageUpdating', '0')
-                    if HOME.getProperty("cfa_daemon_set") == 'Blur':
-                        image, imagecolor = Filter_Image(self.image_now_cfa, self.radius)
-                        HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
-                        HOME.setProperty(self.prefix + "ImageColorcfa", imagecolor)
-                    elif HOME.getProperty("cfa_daemon_set") == 'Pixelate':
-                        image = Filter_Pixelate(self.image_now_cfa, self.pixels)
-                        HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
-                        HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
-                    elif HOME.getProperty("cfa_daemon_set") == 'Posterize':
-                        image = Filter_Posterize(self.image_now_cfa, self.bits)
-                        HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
-                        HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
-                    elif HOME.getProperty("cfa_daemon_set") == 'Distort':
-                        image = Filter_Distort(self.image_now_cfa, self.delta_x, self.delta_y)
-                        HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
-                        HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
-                    elif HOME.getProperty("cfa_daemon_set") == 'Two tone':
-                        image = Filter_Twotone(self.id, self.black, self.white)
-                        HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
-                        HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
-                except:
-                    log("Could not process image for cfa daemon")
-                HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             if self.image_now != self.image_prev and xbmc.Player().isPlayingAudio():
                 try:
                     self.image_prev = self.image_now
