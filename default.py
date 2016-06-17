@@ -51,22 +51,27 @@ class Main:
                             image, imagecolor = Filter_Image(self.image_now_cpa, self.radius)
                             HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
                             HOME.setProperty(self.prefix + "ImageColorcpa", imagecolor)
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
                         elif HOME.getProperty("cpa_daemon_set") == 'Pixelate':
                             image = Filter_Pixelate(self.image_now_cpa, self.pixels)
                             HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
                             HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
                         elif HOME.getProperty("cpa_daemon_set") == 'Posterize':
                             image = Filter_Posterize(self.image_now_cpa, self.bits)
                             HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
                             HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
                         elif HOME.getProperty("cpa_daemon_set") == 'Distort':
                             image = Filter_Distort(self.image_now_cpa, self.delta_x, self.delta_y)
                             HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
                             HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
                         elif HOME.getProperty("cpa_daemon_set") == 'Two tone':
                             image = Filter_Twotone(self.image_now_cpa, self.black, self.white)
                             HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
                             HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
                     except:
                         log("Could not process image for cpa daemon")
                     HOME.setProperty(self.prefix + 'ImageUpdating', '1')
@@ -80,22 +85,27 @@ class Main:
                             image, imagecolor = Filter_Image(self.image_now_cfa, self.radius)
                             HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
                             HOME.setProperty(self.prefix + "ImageColorcfa", imagecolor)
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
                         elif HOME.getProperty("cfa_daemon_set") == 'Pixelate':
                             image = Filter_Pixelate(self.image_now_cfa, self.pixels)
                             HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
                             HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
                         elif HOME.getProperty("cfa_daemon_set") == 'Posterize':
                             image = Filter_Posterize(self.image_now_cfa, self.bits)
                             HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
                             HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
                         elif HOME.getProperty("cfa_daemon_set") == 'Distort':
                             image = Filter_Distort(self.image_now_cfa, self.delta_x, self.delta_y)
                             HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
                             HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
                         elif HOME.getProperty("cfa_daemon_set") == 'Two tone':
                             image = Filter_Twotone(self.image_now_cfa, self.black, self.white)
                             HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
                             HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
                     except:
                         log("Could not process image for cfa daemon")
                     HOME.setProperty(self.prefix + 'ImageUpdating', '1')
@@ -139,6 +149,7 @@ class Main:
             elif info == 'randomcolor':
                 imagecolor = Random_Color()
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
+                HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(imagecolor))
             elif info == 'bluronly':
                 HOME.clearProperty(self.prefix + 'ImageFilter')
                 image = Filter_ImageOnly(self.id, self.radius)
@@ -148,9 +159,11 @@ class Main:
                 image, imagecolor = Filter_Image(self.id, self.radius)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
+                HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(imagecolor))
             elif info == 'pixelate':
                 imagecolor = Random_Color()
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
+                HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(imagecolor))
                 image = Filter_Pixelate(self.id, self.pixels)
                 if image  != "":
                     HOME.setProperty(self.prefix + 'ImageFilter', image)

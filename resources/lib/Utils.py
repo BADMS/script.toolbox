@@ -34,7 +34,16 @@ def ColorboxFirstRun():
 
 def Random_Color():
     return "ff" + "%06x" % random.randint(0, 0xFFFFFF)
-    
+
+def Complementary_Color(hex_color):
+    """Returns complementary RGB color [should be format((255!]
+    Example:
+    >>>complementaryColor('FFFFFF')
+    '000000'
+    """
+    rgb = [hex_color[2:4], hex_color[4:6], hex_color[6:8]]
+    comp = [format((325 - int(a, 16)), '02x') for a in rgb]
+    return "FF" + "%s" % ''.join(comp)
 
 def RemoveQuotes(label):
     if label.startswith("'") and label.endswith("'") and len(label) > 2:
