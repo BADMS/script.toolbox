@@ -51,7 +51,7 @@ class Main:
                             image, imagecolor = Filter_Image(self.image_now_cpa, self.radius)
                             HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
                             HOME.setProperty(self.prefix + "ImageColorcpa", imagecolor)
-                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(imagecolor))
                         elif HOME.getProperty("cpa_daemon_set") == 'Pixelate':
                             image = Filter_Pixelate(self.image_now_cpa, self.pixels)
                             HOME.setProperty(self.prefix + 'ImageFiltercpa', image)

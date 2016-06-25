@@ -45,7 +45,12 @@ def Complementary_Color(hex_color):
     '000000'
     """
     rgb = [hex_color[2:4], hex_color[4:6], hex_color[6:8]]
-    comp = [format((325 - int(a, 16)), '02x') for a in rgb]
+    comp = [format(((int(a, 16) * -1) + 275), '02x') for a in rgb]
+
+    if (int(comp[0], 16) > 99 and int(comp[0], 16) < 150 and
+        int(comp[1], 16) > 99 and int(comp[1], 16) < 150 and
+        int(comp[2], 16) > 99 and int(comp[2], 16) < 150):
+            return "FFc2836d"
     return "FF" + "%s" % ''.join(comp)
 
 def RemoveQuotes(label):
