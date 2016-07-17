@@ -89,6 +89,8 @@ script.colorbox
 
   Window(home).Property(ImageColorcpa) <- available current poster, Blur returns overall color others are random
   
+  Window(home).Property(ImageCColorcpa) <- available current poster, Complementary color (opposite) of ImageColorcpa
+  
   Window(home).Property(ImageFiltercfa) <- available current fanart
 
   Window(home).Property(ImageFiltercpa) <- available current poster
