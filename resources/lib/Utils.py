@@ -11,6 +11,7 @@ import random
 import math
 from PIL import Image, ImageOps, ImageEnhance, ImageDraw, ImageStat
 from ImageOperations import MyGaussianBlur
+from decimal import *
 from xml.dom.minidom import parse
 
 ADDON = xbmcaddon.Addon()
@@ -59,6 +60,18 @@ def RemoveQuotes(label):
         if label.startswith('"') and label.endswith('"') and len(label) > 2:
             label = label[1:-1]
     return label
+
+def Show_Percentage():
+    """nitems = int(xbmc.getInfoLabel('Container().NumItems'))
+    for x in range(0, nitems):"""
+    stot = int(xbmc.getInfoLabel('ListItem.Property(TotalEpisodes)'))
+    wtot = int(xbmc.getInfoLabel('ListItem.Property(WatchedEpisodes)'))
+    """dbid = int(xbmc.getInfoLabel('ListItem(%s).DBID' %x))"""
+    getcontext().prec = 6
+    perc = "{:.0f}".format(100 / Decimal(stot) * Decimal(wtot))
+    """prop = "%i.Show_Percentage" % dbid"""
+    HOME.setProperty("Show_Percentage", perc)
+    return
 
 
 def Filter_Image(filterimage, radius):

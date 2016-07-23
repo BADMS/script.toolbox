@@ -150,6 +150,8 @@ class Main:
                 imagecolor = Random_Color()
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
                 HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(imagecolor))
+            elif info == 'percentage':
+                Show_Percentage()
             elif info == 'bluronly':
                 HOME.clearProperty(self.prefix + 'ImageFilter')
                 image = Filter_ImageOnly(self.id, self.radius)
