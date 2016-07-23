@@ -11,13 +11,15 @@ script.colorbox
   
   distort: will fuzzy spread image using two deltas, x & y.
   
+  fakelight: will add a low grade light source [wip]
+  
   blur: will return a guassian blurred image dependant on radius supplied, larger radius means larger blur + color match
   
   bluronly: will return a guassian blurred image dependant on radius supplied, larger radius means larger blur - no color match
   
   randomcolor: will return a random color
 
-  daemon for lisitem fanart, to ignore in viewmodes set window property true (see below)
+  daemon for lisitem fanart|poster|icon|fallback
 
   daemon for music player fanart
 
@@ -39,6 +41,8 @@ script.colorbox
   
   RunScript(script.colorbox,info=distort,id='"IMAGE_TO_USE"',delta_x=DELTA_X,delta_y=DELTA_Y,prefix=RETURN_IMAGE_ID)
 
+  RunScript(script.colorbox,info=fakelight,id='"IMAGE_TO_USE"',prefix=RETURN_IMAGE_ID)
+
   RunScript(script.colorbox,info=blur,id='"IMAGE_TO_USE"',radius=RADIUS_SIZE,prefix=RETURN_IMAGE_ID)
 
   RunScript(script.colorbox,info=bluronly,id='"IMAGE_TO_USE"',radius=RADIUS_SIZE,prefix=RETURN_IMAGE_ID)
@@ -56,9 +60,9 @@ script.colorbox
 
   2ND_COLOR           Color to replace the white pixels in format #000000
 
-  BIT_SIZE            1,2,3,4,5,6,7,8
+  BIT_SIZE            1-8
 
-  PIXELATION_SIZE     1-infinity, though 1 will return a 1:1 copy!
+  PIXELATION_SIZE     1-infinity
 
   RADIUS_SIZE         The larger the more blurred the returned image
   
@@ -81,17 +85,19 @@ script.colorbox
   
   Window(home).Property(ImageFilterfa1|2|3) <- available when music playing, 1 is blur, 2 pixel, 3 posterize
   
-  Window(home).Property(ImageColorcfa) <- available current fanart if cfa_ignore_set is set, Blur returns overall color others are random
+  Window(home).Property(ImageColorcfa) <- available current fanart, Blur returns overall color others are random
 
-  Window(home).Property(ImageColorcpa) <- available current poster if cpa_ignore_set is set, Blur returns overall color others are random
+  Window(home).Property(ImageColorcpa) <- available current poster, Blur returns overall color others are random
   
-  Window(home).Property(ImageFiltercfa) <- available current fanart if cfa_ignore_set is set
-
-  Window(home).Property(ImageFiltercpa) <- available current poster if cpa_ignore_set is set
-
-  Window(home).Property(cfa_ignore_set) <- set 'None' for daemon to ignore fanart or Blur|Distort|Posterize|Pixelate
+  Window(home).Property(ImageCColorcpa) <- available current poster, Complementary color (opposite) of ImageColorcpa
   
-  Window(home).Property(cpa_ignore_set) <- set 'None' for daemon to ignore poster or Blur|Distort|Posterize|Pixelate
+  Window(home).Property(ImageFiltercfa) <- available current fanart
+
+  Window(home).Property(ImageFiltercpa) <- available current poster
+
+  Window(home).Property(cfa_daemon_set) <- set 'None' for daemon to ignore fanart or Blur|Distort|Posterize|Pixelate|Two tone
+  
+  Window(home).Property(cpa_daemon_set) <- set 'None' for daemon to ignore poster or Blur|Distort|Posterize|Pixelate|Two tone
   
   
 - Daemon:
