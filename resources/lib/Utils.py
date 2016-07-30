@@ -64,15 +64,17 @@ def RemoveQuotes(label):
 def Show_Percentage():
     """nitems = int(xbmc.getInfoLabel('Container().NumItems'))
     for x in range(0, nitems):"""
-    stot = int(xbmc.getInfoLabel('ListItem.Property(TotalEpisodes)'))
-    wtot = int(xbmc.getInfoLabel('ListItem.Property(WatchedEpisodes)'))
-    """dbid = int(xbmc.getInfoLabel('ListItem(%s).DBID' %x))"""
-    getcontext().prec = 6
-    perc = "{:.0f}".format(100 / Decimal(stot) * Decimal(wtot))
-    """prop = "%i.Show_Percentage" % dbid"""
-    HOME.setProperty("Show_Percentage", perc)
+    try:
+        stot = int(xbmc.getInfoLabel('ListItem.Property(TotalEpisodes)'))
+        wtot = int(xbmc.getInfoLabel('ListItem.Property(WatchedEpisodes)'))
+        """dbid = int(xbmc.getInfoLabel('ListItem(%s).DBID' %x))"""
+        getcontext().prec = 6
+        perc = "{:.0f}".format(100 / Decimal(stot) * Decimal(wtot))
+        """prop = "%i.Show_Percentage" % dbid"""
+        HOME.setProperty("Show_Percentage", perc)
+    except:
+        return
     return
-
 
 def Filter_Image(filterimage, radius):
     md5 = hashlib.md5(filterimage).hexdigest()
@@ -104,7 +106,6 @@ def Filter_Image(filterimage, radius):
                     img = Image.open(targetfile)
                     break
             except:
-                
                 xbmc.sleep(300)
         if not img:
             return "", ""

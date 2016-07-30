@@ -27,6 +27,11 @@ class Main:
         if self.control == "plugin":
             xbmcplugin.endOfDirectory(self.handle)
         while self.daemon and not xbmc.abortRequested:
+            self.show_now = xbmc.getInfoLabel("ListItem.TVShowTitle")
+            if self.show_now != self.show_prev and xbmc.getInfoLabel("ListItem.Property(WatchedEpisodes)") != self.show_watched:
+                self.show_watched = xbmc.getInfoLabel("ListItem.Property(WatchedEpisodes)")
+                self.show_prev = self.show_now
+                Show_Percentage()
             if not HOME.getProperty("cpa_daemon_set") == 'None':
                 self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(poster)")
                 if xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,episode)"):
@@ -203,14 +208,17 @@ class Main:
         self.delta_x = 50
         self.delta_y = 90
         self.daemon = False
+        self.show_now = ""
         self.image_now = ""
         self.image_now_fa = ""
         self.image_now_cfa = ""
         self.image_now_cpa = ""
+        self.show_prev = ""
         self.image_prev = ""
         self.image_prev_fa = ""
         self.image_prev_cfa = ""
         self.image_prev_cpa = ""
+        self.show_watched = ""
         self.autoclose = ""
 
     def _parse_argv(self):
