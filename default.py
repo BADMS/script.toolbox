@@ -144,8 +144,7 @@ class Main:
                     HOME.setProperty(self.prefix + "ImageColorfa3", Random_Color())
                 except:
                     log("Could not process image for fa daemon")
-            else:
-                xbmc.sleep(300)
+            xbmc.sleep(300)
 
     def _StartInfoActions(self):
         for info in self.infos:
@@ -172,7 +171,7 @@ class Main:
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
                 HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(imagecolor))
                 image = Filter_Pixelate(self.id, self.pixels)
-                if image  != "":
+                if image != "":
                     HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             elif info == 'twotone':
