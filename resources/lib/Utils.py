@@ -352,48 +352,36 @@ def Filter_Distort(filterimage, delta_x, delta_y):
 
 
 def Get_Colors(img):
-    width, height = img.size
-    pixels = img.load()
-    data = []
-    for x in range(width / 2):
-        for y in range(height / 2):
-            cpixel = pixels[x * 2, y * 2]
-            data.append(cpixel)
-    r = 0
-    g = 0
-    b = 0
-    counter = 0
-    for x in range(len(data)):
-        brightness = data[x][0] + data[x][1] + data[x][2]
-        if brightness > 150 and brightness < 720:
-            r += data[x][0]
-            g += data[x][1]
-            b += data[x][2]
-            counter += 1
-    if counter > 0:
-        rAvg = int(r / counter)
-        gAvg = int(g / counter)
-        bAvg = int(b / counter)
-        Avg = (rAvg + gAvg + bAvg) / 3
-        minBrightness = 130
-        if Avg < minBrightness:
-            Diff = minBrightness - Avg
-            if rAvg <= (255 - Diff):
-                rAvg += Diff
-            else:
-                rAvg = 255
-            if gAvg <= (255 - Diff):
-                gAvg += Diff
-            else:
-                gAvg = 255
-            if bAvg <= (255 - Diff):
-                bAvg += Diff
-            else:
-                bAvg = 255
-        imagecolor = "FF%s%s%s" % (format(rAvg, '02x'), format(gAvg, '02x'), format(bAvg, '02x'))
-    else:
-        imagecolor = "FFF0F0F0"
-    return imagecolor
+    colour_tuple = [None, None, None]
+    for channel in range(3):
+
+        # Get data for one channel at a time
+        pixels = img.getdata(band=channel)
+
+        values = []
+        for pixel in pixels:
+            values.append(pixel)
+
+        colour_tuple[channel] = clamp(sum(values) / len(values))
+
+    return 'ff%02x%02x%02x' % tuple(colour_tuple)
+
+
+def Get_Frequent_Color(img):
+    w, h = img.size
+    pixels = img.getcolors(w * h)
+
+    most_frequent_pixel = pixels[0]
+
+    for count, colour in pixels:
+        if count > most_frequent_pixel[0]:
+            most_frequent_pixel = (count, colour)
+
+    return 'ff%02x%02x%02x' % tuple(most_frequent_pixel[1])
+
+
+def clamp(x): 
+    return max(0, min(x, 255))
 
 
 def Pixelate_Image(img, pixelSize=20):
