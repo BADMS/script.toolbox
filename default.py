@@ -77,6 +77,11 @@ class Main:
                             HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
                             HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
                             HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
+                        elif HOME.getProperty("cpa_daemon_set") == 'Shift block':
+                            image = Filter_Shiftblock(self.image_now_cpa)
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
                     except:
                         log("Could not process image for cpa daemon")
                     HOME.setProperty(self.prefix + 'ImageUpdating', '1')
@@ -108,6 +113,11 @@ class Main:
                             HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
                         elif HOME.getProperty("cfa_daemon_set") == 'Two tone':
                             image = Filter_Twotone(self.image_now_cfa, self.black, self.white)
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
+                        elif HOME.getProperty("cfa_daemon_set") == 'Shift block':
+                            image = Filter_Shiftblock(self.image_now_cfa)
                             HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
                             HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
                             HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
@@ -173,23 +183,22 @@ class Main:
                 image = Filter_Pixelate(self.id, self.pixels)
                 if image != "":
                     HOME.setProperty(self.prefix + 'ImageFilter', image)
-                HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             elif info == 'twotone':
                 image = Filter_Twotone(self.id, self.black, self.white)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
-                HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             elif info == 'posterize':
                 image = Filter_Posterize(self.id, self.bits)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
-                HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             elif info == 'fakelight':
                 image = Filter_Fakelight(self.id, self.pixels)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
-                HOME.setProperty(self.prefix + 'ImageUpdating', '1')
             elif info == 'distort':
                 image = Filter_Distort(self.id, self.delta_x, self.delta_y)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
-                HOME.setProperty(self.prefix + 'ImageUpdating', '1')
+            elif info == 'shiftblock':
+                image = Filter_Shiftblock(self.id)
+                HOME.setProperty(self.prefix + 'ImageFilter', image)
+        HOME.setProperty(self.prefix + 'ImageUpdating', '1')
 
     def _init_vars(self):
         self.window = xbmcgui.Window(10000)  # Home Window

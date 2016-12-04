@@ -199,6 +199,42 @@ def Filter_Pixelate(filterimage, pixels):
     return targetfile
 
 
+def Filter_Shiftblock(filterimage, blockSize=192, sigma=0.05, iterations=1920):
+    md5 = hashlib.md5(filterimage).hexdigest()
+    filename = md5 + "shift" + str(blockSize) + str(sigma) + str(iterations) + ".png"
+    targetfile = os.path.join(ADDON_DATA_PATH, filename)
+    cachedthumb = xbmc.getCacheThumbName(filterimage)
+    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
+    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
+    if filterimage == "":
+        return ""
+    if not xbmcvfs.exists(targetfile):
+        img = None
+        for i in range(1, 4):
+            try:
+                if xbmcvfs.exists(xbmc_cache_file):
+                    
+                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
+                    break
+                elif xbmcvfs.exists(xbmc_vid_cache_file):
+                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
+                    break
+                else:
+                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
+                    if filterimage.endswith("/"):
+                        filterimage = filterimage[:-1]
+                    xbmcvfs.copy(filterimage, targetfile)
+                    img = Image.open(targetfile)
+                    break
+            except:
+                xbmc.sleep(300)
+        if not img:
+            return ""
+        img = Shiftblock_Image(img, blockSize, sigma, iterations)
+        img.save(targetfile)
+    return targetfile
+
+
 def Filter_Fakelight(filterimage, pixels):
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "fakelight" + str(pixels) + ".png"
@@ -399,6 +435,26 @@ def Pixelate_Image(img, pixelSize=20):
     return image
 
 
+def Shiftblock_Image(image, blockSize=192, sigma=1.05, iterations=300):
+    seed = random.random()
+    r = random.Random(seed)
+    for i in xrange(iterations):
+        # Select a block
+        bx = int(r.uniform(0, image.size[0]-blockSize))
+        by = int(r.uniform(0, image.size[1]-blockSize))
+        block = image.crop((bx, by, bx+blockSize-1, by+blockSize-1))
+
+        # Figure out how much to move it.
+        # The call to floor() is important so we always round toward
+        # 0 rather than to -inf. Just int() would bias the block motion.
+        mx = int(math.floor(r.normalvariate(0, sigma)))
+        my = int(math.floor(r.normalvariate(0, sigma)))
+
+        # Now actually move the block
+        image.paste(block, (bx+mx, by+my))
+    return image
+
+
 def image_recolorize(src, black="#000000", white="#FFFFFF"):
     # img = image_recolorize(img, black="#000000", white="#FFFFFF")
     """
@@ -440,7 +496,7 @@ def image_distort(img, delta_x=50, delta_y=90):
     pix=[0, 0]
     for x in range(WIDTH):
         for y in range(HEIGHT):
-            #following expression calculates the snuffling 
+            #following expression calculates the shuffling 
             x_shift, y_shift =  ( int(abs(math.sin(x) * WIDTH / delta_x)) ,
                                   int(abs(math.tan(math.sin(y))) * HEIGHT / delta_y))
             if x + x_shift < WIDTH:
