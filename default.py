@@ -196,7 +196,7 @@ class Main:
                 image = Filter_Distort(self.id, self.delta_x, self.delta_y)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
             elif info == 'shiftblock':
-                image = Filter_Shiftblock(self.id)
+                image = Filter_Shiftblock(self.id, self.blocksize, self.sigma, self.iterations)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
         HOME.setProperty(self.prefix + 'ImageUpdating', '1')
 
@@ -215,6 +215,9 @@ class Main:
         self.white = "#FFFFFF"
         self.delta_x = 50
         self.delta_y = 90
+        self.blocksize = 192
+        self.sigma = 0.05
+        self.iterations = 1920
         self.daemon = False
         self.show_now = ""
         self.image_now = ""
@@ -261,6 +264,12 @@ class Main:
                 self.delta_x = int(arg[8:])
             elif arg.startswith('delta_y='):
                 self.delta_y = int(arg[8:])
+            elif arg.startswith('blocksize='):
+                self.blocksize = int(arg[10:])
+            elif arg.startswith('sigma='):
+                self.sigma = int(arg[6:])
+            elif arg.startswith('iterations='):
+                self.iterations = int(arg[11:])
             elif arg.startswith('container='):
                 self.container = RemoveQuotes(arg[10:])
 
