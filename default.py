@@ -82,6 +82,41 @@ class Main:
                             HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
                             HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
                             HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
+                        elif HOME.getProperty("cpa_daemon_set") == 'Pixel none':
+                            image = Filter_Pixelshift(self.image_now_cpa, "none")
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
+                        elif HOME.getProperty("cpa_daemon_set") == 'Pixel waves':
+                            image = Filter_Pixelshift(self.image_now_cpa, "waves")
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
+                        elif HOME.getProperty("cpa_daemon_set") == 'Pixel random':
+                            image = Filter_Pixelshift(self.image_now_cpa, "random")
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
+                        elif HOME.getProperty("cpa_daemon_set") == 'Pixel file':
+                            image = Filter_Pixelshift(self.image_now_cpa, "file")
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
+                        elif HOME.getProperty("cpa_daemon_set") == 'Pixel edges':
+                            image = Filter_Pixelshift(self.image_now_cpa, "edges")
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
+                        elif HOME.getProperty("cpa_daemon_set") == 'Pixel fedges':
+                            image = Filter_Pixelshift(self.image_now_cpa, "fedges")
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
+                        elif HOME.getProperty("cpa_daemon_set") == 'Fake light':
+                            image = Filter_Fakelight(self.image_now_cpa, pixels=192)
+                            HOME.setProperty(self.prefix + 'ImageFiltercpa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcpa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcpa", Complementary_Color(HOME.getProperty("ImageColorcpa")))
                     except:
                         log("Could not process image for cpa daemon")
                     HOME.setProperty(self.prefix + 'ImageUpdating', '1')
@@ -118,6 +153,41 @@ class Main:
                             HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
                         elif HOME.getProperty("cfa_daemon_set") == 'Shift block':
                             image = Filter_Shiftblock(self.image_now_cfa)
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
+                        elif HOME.getProperty("cfa_daemon_set") == 'Pixel none':
+                            image = Filter_Pixelshift(self.image_now_cfa, "none")
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
+                        elif HOME.getProperty("cfa_daemon_set") == 'Pixel waves':
+                            image = Filter_Pixelshift(self.image_now_cfa, "waves")
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
+                        elif HOME.getProperty("cfa_daemon_set") == 'Pixel random':
+                            image = Filter_Pixelshift(self.image_now_cfa, "random")
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
+                        elif HOME.getProperty("cfa_daemon_set") == 'Pixel file':
+                            image = Filter_Pixelshift(self.image_now_cfa, "file")
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
+                        elif HOME.getProperty("cfa_daemon_set") == 'Pixel edges':
+                            image = Filter_Pixelshift(self.image_now_cfa, "edges")
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
+                        elif HOME.getProperty("cfa_daemon_set") == 'Pixel fedges':
+                            image = Filter_Pixelshift(self.image_now_cfa, "fedges")
+                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
+                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
+                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
+                        elif HOME.getProperty("cfa_daemon_set") == 'Fake light':
+                            image = Filter_Fakelight(self.image_now_cfa, pixels=192)
                             HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
                             HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
                             HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))

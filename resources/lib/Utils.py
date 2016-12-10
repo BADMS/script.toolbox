@@ -20,6 +20,12 @@ ADDON_LANGUAGE = ADDON.getLocalizedString
 ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID))
 HOME = xbmcgui.Window(10000)
 
+black_pixel = (0, 0, 0, 255)
+white_pixel = (255, 255, 255, 255)
+randomness = int(0)
+threshold = int(100)
+clength = int(50)
+angle = float(0)
 
 def ColorboxFirstRun():
     initdone = HOME.getProperty("colorbox_initialised")
@@ -231,6 +237,51 @@ def Filter_Shiftblock(filterimage, blockSize=192, sigma=0.05, iterations=1920):
         if not img:
             return ""
         img = Shiftblock_Image(img, blockSize, sigma, iterations)
+        img.save(targetfile)
+    return targetfile
+
+
+def Filter_Pixelshift(filterimage, ptype="none", pthreshold=100, pclength=50, pangle=0, prandomness=0):
+    """stype; 1=random, 2=edges, 3=waves, 4=file, 5=file_edges, 0=none"""
+    md5 = hashlib.md5(filterimage).hexdigest()
+    filename = md5 + "pixelshift" + str(ptype) + str(pthreshold) + str(pclength) + str(pangle) + str(prandomness) + ".png"
+    targetfile = os.path.join(ADDON_DATA_PATH, filename)
+    cachedthumb = xbmc.getCacheThumbName(filterimage)
+    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
+    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
+    global threshold
+    threshold = int(pthreshold)
+    global clength
+    clength = int(pclength)
+    global angle
+    angle = int(pangle)
+    global randomness
+    randomness = float(prandomness)
+    if filterimage == "":
+        return ""
+    if not xbmcvfs.exists(targetfile):
+        img = None
+        for i in range(1, 4):
+            try:
+                if xbmcvfs.exists(xbmc_cache_file):
+                    
+                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
+                    break
+                elif xbmcvfs.exists(xbmc_vid_cache_file):
+                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
+                    break
+                else:
+                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
+                    if filterimage.endswith("/"):
+                        filterimage = filterimage[:-1]
+                    xbmcvfs.copy(filterimage, targetfile)
+                    img = Image.open(targetfile)
+                    break
+            except:
+                xbmc.sleep(300)
+        if not img:
+            return ""
+        img = Pixelshift_Image(img, ptype)
         img.save(targetfile)
     return targetfile
 
@@ -452,6 +503,220 @@ def Shiftblock_Image(image, blockSize=192, sigma=1.05, iterations=300):
 
         # Now actually move the block
         image.paste(block, (bx+mx, by+my))
+    return image
+
+
+# Sorts a given row of pixels
+def sort_interval(interval):
+	if interval == []:
+		return []
+	else:
+		return(sorted(interval, key = lambda x: x[0] + x[1] + x[2]))
+
+# Generates random widths for intervals. Used by int_random()
+def random_width():
+	x = random.random()
+	# width = int(200*(1-(1-(x-1)**2)**0.5))
+	width = int(clength*(1-x))
+	# width = int(50/(x+0.1))
+	return(width)
+
+# Functions starting with int return intervals according to which to sort
+def int_edges(pixels, img):
+	edges = img.filter(ImageFilter.FIND_EDGES)
+	edges = edges.convert('RGBA')
+	edge_data = edges.load()
+
+	filter_pixels = []
+	edge_pixels = []
+	intervals = []
+
+	for y in range(img.size[1]):
+		filter_pixels.append([])
+		for x in range(img.size[0]):
+			filter_pixels[y].append(edge_data[x, y])
+
+	for y in range(len(pixels)):
+		edge_pixels.append([])
+		for x in range(len(pixels[0])):
+			if filter_pixels[y][x][0] + filter_pixels[y][x][1] + filter_pixels[y][x][2] < threshold:
+				edge_pixels[y].append(white_pixel)
+			else:
+				edge_pixels[y].append(black_pixel)
+
+	for y in range(len(pixels)-1,1,-1):
+		for x in range(len(pixels[0])-1,1,-1):
+			if edge_pixels[y][x] == black_pixel and edge_pixels[y][x-1] == black_pixel:
+				edge_pixels[y][x] = white_pixel
+
+	for y in range(len(pixels)):
+		intervals.append([])
+		for x in range(len(pixels[0])):
+			if edge_pixels[y][x] == black_pixel:
+				intervals[y].append(x)
+		intervals[y].append(len(pixels[0]))
+	return(intervals)
+
+def int_random(pixels, img):
+	intervals = []
+
+	for y in range(len(pixels)):
+		intervals.append([])
+		x = 0
+		while True:
+			width = random_width()
+			x += width
+			if x > len(pixels[0]):
+				intervals[y].append(len(pixels[0]))
+				break
+			else:
+				intervals[y].append(x)
+	return(intervals)
+
+def int_waves(pixels, img):
+	intervals = []
+
+	for y in range(len(pixels)):
+		intervals.append([])
+		x = 0
+		while True:
+			width = clength + random.randint(0,10)
+			x += width
+			if x > len(pixels[0]):
+				intervals[y].append(len(pixels[0]))
+				break
+			else:
+				intervals[y].append(x)
+	return(intervals)
+
+def int_file(pixels, img):
+	intervals = []
+	file_pixels = []
+
+	img = img.convert('RGBA')
+	data = img.load()
+	for y in range(img.size[1]):
+		file_pixels.append([])
+		for x in range(img.size[0]):
+			file_pixels[y].append(data[x, y])
+
+	for y in range(len(pixels)-1,1,-1):
+		for x in range(len(pixels[0])-1,1,-1):
+			if file_pixels[y][x] == black_pixel and file_pixels[y][x-1] == black_pixel:
+				file_pixels[y][x] = white_pixel
+
+	for y in range(len(pixels)):
+		intervals.append([])
+		for x in range(len(pixels[0])):
+			if file_pixels[y][x] == black_pixel:
+				intervals[y].append(x)
+		intervals[y].append(len(pixels[0]))
+
+	return intervals
+
+def int_file_edges(pixels, img):
+	img = img.resize((len(pixels[0]), len(pixels)), Image.ANTIALIAS)
+	edges = img.filter(ImageFilter.FIND_EDGES)
+	edges = edges.convert('RGBA')
+	edge_data = edges.load()
+
+	filter_pixels = []
+	edge_pixels = []
+	intervals = []
+
+	for y in range(img.size[1]):
+		filter_pixels.append([])
+		for x in range(img.size[0]):
+			filter_pixels[y].append(edge_data[x, y])
+
+	for y in range(len(pixels)):
+		edge_pixels.append([])
+		for x in range(len(pixels[0])):
+			if filter_pixels[y][x][0] + filter_pixels[y][x][1] + filter_pixels[y][x][2] < threshold:
+				edge_pixels[y].append(white_pixel)
+			else:
+				edge_pixels[y].append(black_pixel)
+
+	for y in range(len(pixels)-1,1,-1):
+		for x in range(len(pixels[0])-1,1,-1):
+			if edge_pixels[y][x] == black_pixel and edge_pixels[y][x-1] == black_pixel:
+				edge_pixels[y][x] = white_pixel
+
+	for y in range(len(pixels)):
+		intervals.append([])
+		for x in range(len(pixels[0])):
+			if edge_pixels[y][x] == black_pixel:
+				intervals[y].append(x)
+		intervals[y].append(len(pixels[0]))
+	return(intervals)
+
+def int_none(pixels, img):
+	intervals = []
+	for y in range(len(pixels)):
+		intervals.append([len(pixels[y])])
+	return(intervals)
+
+# Sorts the image
+def sort_image(pixels, intervals):
+	# Hold sorted pixels
+	sorted_pixels=[]
+	for y in range(len(pixels)):
+		row=[]
+		xMin = 0
+		for xMax in intervals[y]:
+			interval = []
+			for x in range(xMin, xMax):
+				interval.append(pixels[y][x])
+			if random.randint(0,100) >= randomness:
+				row = row + sort_interval(interval)
+			else:
+				row = row + interval
+			xMin = xMax
+		row.append(pixels[y][0]) # wat
+		sorted_pixels.append(row)
+	return(sorted_pixels)
+
+def pixel_sort(img, int_function):
+	img.convert('RGBA')
+	img = img.rotate(angle, expand = True)
+
+	data = img.load()
+	new = Image.new('RGBA', img.size)
+
+	pixels = []
+
+	for y in range(img.size[1]):
+		pixels.append([])
+		for x in range(img.size[0]):
+			pixels[y].append(data[x, y])
+
+	intervals = int_function(pixels, img)
+	sorted_pixels = sort_image(pixels, intervals)
+
+	for y in range(img.size[1]):
+		for x in range(img.size[0]):
+			new.putpixel((x, y), sorted_pixels[y][x])
+
+	new = new.rotate(-angle)
+	return new
+
+def Pixelshift_Image(img, stype):
+    # Get function to define intervals from command line arguments
+    """stype; 1=random, 2=edges, 3=waves, 4=file, 5=file_edges, 0=none"""
+    if stype == 'random':
+        int_function = int_random
+    elif stype == 'none':
+        int_function = int_none
+    elif stype == 'edges':
+        int_function = int_edges
+    elif stype == 'waves':
+        int_function = int_waves
+    elif stype == 'file':
+        int_function = int_file
+    elif stype == 'fedges':
+        int_function = int_file_edges
+
+    image = pixel_sort(img, int_function)
     return image
 
 
