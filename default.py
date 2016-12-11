@@ -191,11 +191,6 @@ class Main:
                             HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
                             HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
                             HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
-                        elif HOME.getProperty("cfa_daemon_set") == 'Block RGB':
-                            image = Filter_Blockshift(self.image_now_cfa)
-                            HOME.setProperty(self.prefix + 'ImageFiltercfa', image)
-                            HOME.setProperty(self.prefix + "ImageColorcfa", Random_Color())
-                            HOME.setProperty(self.prefix + "ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
                     except:
                         log("Could not process image for cfa daemon")
                     HOME.setProperty(self.prefix + 'ImageUpdating', '1')
