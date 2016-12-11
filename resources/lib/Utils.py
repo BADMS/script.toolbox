@@ -9,7 +9,7 @@ import hashlib
 import urllib
 import random
 import math
-from PIL import Image, ImageOps, ImageEnhance, ImageDraw, ImageStat
+from PIL import Image, ImageOps, ImageEnhance, ImageDraw, ImageStat, ImageFilter
 from ImageOperations import MyGaussianBlur
 from decimal import *
 from xml.dom.minidom import parse
@@ -612,7 +612,7 @@ def int_file(pixels, img):
 				intervals[y].append(x)
 		intervals[y].append(len(pixels[0]))
 
-	return intervals
+	return(intervals)
 
 def int_file_edges(pixels, img):
 	img = img.resize((len(pixels[0]), len(pixels)), Image.ANTIALIAS)
