@@ -208,6 +208,12 @@ class Main:
                     image = Filter_Posterize(self.image_now, self.bits)
                     HOME.setProperty(self.prefix + 'ImageFilter3', image)
                     HOME.setProperty(self.prefix + "ImageColor3", Random_Color())
+                    image = Filter_Twotone(self.image_now)
+                    HOME.setProperty(self.prefix + 'ImageFilter4', image)
+                    HOME.setProperty(self.prefix + "ImageColor4", Random_Color())
+                    image = Filter_Distort(self.image_now)
+                    HOME.setProperty(self.prefix + 'ImageFilter5', image)
+                    HOME.setProperty(self.prefix + "ImageColor5", Random_Color())
                 except:
                     log("Could not process image for f daemon")
             if self.image_now_fa != self.image_prev_fa and xbmc.Player().isPlayingAudio():
@@ -222,6 +228,12 @@ class Main:
                     image = Filter_Posterize(self.image_now_fa, self.bits)
                     HOME.setProperty(self.prefix + 'ImageFilterfa3', image)
                     HOME.setProperty(self.prefix + "ImageColorfa3", Random_Color())
+                    image = Filter_Twotone(self.image_now_fa)
+                    HOME.setProperty(self.prefix + 'ImageFilterfa4', image)
+                    HOME.setProperty(self.prefix + "ImageColorfa4", Random_Color())
+                    image = Filter_Distort(self.image_now_fa)
+                    HOME.setProperty(self.prefix + 'ImageFilterfa5', image)
+                    HOME.setProperty(self.prefix + "ImageColorfa5", Random_Color())
                 except:
                     log("Could not process image for fa daemon")
             xbmc.sleep(300)
