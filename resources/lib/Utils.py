@@ -27,17 +27,6 @@ threshold = int(100)
 clength = int(50)
 angle = float(0)
 
-def ColorboxFirstRun():
-    initdone = HOME.getProperty("colorbox_initialised")
-    if not initdone:
-        if not xbmcvfs.exists(ADDON_DATA_PATH):
-            # addon data path does not exist...create it
-            xbmcvfs.mkdir(ADDON_DATA_PATH)
-            HOME.setProperty('colorbox_initialised', 'True')
-        else: 
-            # addon data path exists
-            HOME.setProperty('colorbox_initialised', 'True')
-
 
 def Random_Color():
     return "ff" + "%06x" % random.randint(0, 0xFFFFFF)

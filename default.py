@@ -8,8 +8,8 @@ ADDON = xbmcaddon.Addon()
 ADDON_VERSION = ADDON.getAddonInfo('version')
 ADDON_LANGUAGE = ADDON.getLocalizedString
 ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
-EXTRAFANART_LIMIT = 4
-EXTRATHUMB_LIMIT = 4
+ADDON_ID = ADDON.getAddonInfo('id')
+ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID))
 HOME = xbmcgui.Window(10000)
 sys.path.append(xbmc.translatePath(os.path.join(ADDON_PATH, 'resources', 'lib')))
 
@@ -26,6 +26,9 @@ class Main:
             self._StartInfoActions()
         if self.control == "plugin":
             xbmcplugin.endOfDirectory(self.handle)
+        if not xbmcvfs.exists(ADDON_DATA_PATH):
+            # addon data path does not exist...create it
+            xbmcvfs.mkdir(ADDON_DATA_PATH)
         while self.daemon and not xbmc.abortRequested:
             self.show_now = xbmc.getInfoLabel("ListItem.TVShowTitle")
             if self.show_now != self.show_prev and xbmc.getInfoLabel("ListItem.Property(WatchedEpisodes)") != self.show_watched:
