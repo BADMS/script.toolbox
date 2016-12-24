@@ -54,6 +54,8 @@ class Main:
                 if self.image_now_cpa != self.image_prev_cpa:
                     try:
                         self.image_prev_cpa = self.image_now_cpa
+                        HOME.setProperty("OldImageColorcpa", HOME.getProperty("ImageColorcpa"))
+                        HOME.setProperty("OldImageCColorcpa", HOME.getProperty("ImageCColorcpa"))
                         HOME.setProperty('ImageUpdating', '0')
                         if HOME.getProperty("cpa_daemon_set") == 'Blur':
                             image, imagecolor = Filter_Image(self.image_now_cpa, self.radius)
@@ -128,6 +130,8 @@ class Main:
                 if self.image_now_cfa != self.image_prev_cfa:
                     try:
                         self.image_prev_cfa = self.image_now_cfa
+                        HOME.setProperty("OldImageColorcfa", HOME.getProperty("ImageColorcfa"))
+                        HOME.setProperty("OldImageCColorcfa", HOME.getProperty("ImageCColorcfa"))
                         HOME.setProperty('ImageUpdating', '0')
                         if HOME.getProperty("cfa_daemon_set") == 'Blur':
                             image, imagecolor = Filter_Image(self.image_now_cfa, self.radius)
@@ -202,6 +206,8 @@ class Main:
                 if self.image_now_cha != self.image_prev_cha:
                     try:
                         self.image_prev_cha = self.image_now_cha
+                        HOME.setProperty("OldImageColorcha", HOME.getProperty("ImageColorcha"))
+                        HOME.setProperty("OldImageCColorcha", HOME.getProperty("ImageCColorcha"))
                         HOME.setProperty('ImageUpdating', '0')
                         imagecolor = Color_Only(self.image_now_cha)
                         HOME.setProperty("ImageColorcha", imagecolor)
