@@ -125,7 +125,7 @@ class Main:
                     HOME.setProperty('ImageUpdating', '1')
             if not HOME.getProperty("cfa_daemon_set") == 'None':
                 self.image_now_cfa = xbmc.getInfoLabel("ListItem.Art(fanart)")
-                if not HOME.getProperty("cfa_daemon_set") == 'None' and self.image_now_cfa != self.image_prev_cfa:
+                if self.image_now_cfa != self.image_prev_cfa:
                     try:
                         self.image_prev_cfa = self.image_now_cfa
                         HOME.setProperty('ImageUpdating', '0')
@@ -133,7 +133,7 @@ class Main:
                             image, imagecolor = Filter_Image(self.image_now_cfa, self.radius)
                             HOME.setProperty('ImageFiltercfa', image)
                             HOME.setProperty("ImageColorcfa", imagecolor)
-                            HOME.setProperty("ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
+                            HOME.setProperty("ImageCColorcfa", Complementary_Color(imagecolor))
                         elif HOME.getProperty("cfa_daemon_set") == 'Pixelate':
                             image = Filter_Pixelate(self.image_now_cfa, self.pixels)
                             HOME.setProperty('ImageFiltercfa', image)
@@ -197,6 +197,18 @@ class Main:
                     except:
                         log("Could not process image for cfa daemon")
                     HOME.setProperty('ImageUpdating', '1')
+            if not HOME.getProperty("cha_daemon_set") == 'None':
+                self.image_now_cha = xbmc.getInfoLabel("Control.GetLabel(7977)")
+                if self.image_now_cha != self.image_prev_cha:
+                    try:
+                        self.image_prev_cha = self.image_now_cha
+                        HOME.setProperty('ImageUpdating', '0')
+                        imagecolor = Color_Only(self.image_now_cha)
+                        HOME.setProperty("ImageColorcha", imagecolor)
+                        HOME.setProperty("ImageCColorcha", Complementary_Color(imagecolor))
+                        HOME.setProperty('ImageUpdating', '1')
+                    except:
+                        log("Could not process image for cha daemon")
             self.image_now = xbmc.getInfoLabel("Player.Art(thumb)")
             self.image_now_fa = xbmc.getInfoLabel("MusicPlayer.Property(Fanart_Image)")
             if self.image_now != self.image_prev and xbmc.Player().isPlayingAudio():
@@ -307,11 +319,13 @@ class Main:
         self.image_now_fa = ""
         self.image_now_cfa = ""
         self.image_now_cpa = ""
+        self.image_now_cha = ""
         self.show_prev = ""
         self.image_prev = ""
         self.image_prev_fa = ""
         self.image_prev_cfa = ""
         self.image_prev_cpa = ""
+        self.image_prev_cha = ""
         self.show_watched = ""
         self.autoclose = ""
 
