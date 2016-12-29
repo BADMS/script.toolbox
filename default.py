@@ -16,19 +16,19 @@ sys.path.append(xbmc.translatePath(os.path.join(ADDON_PATH, 'resources', 'lib'))
 from Utils import *
 
 
-class Main:
+class ColorBoxMain:
 
     def __init__(self):
         log("version %s started" % ADDON_VERSION)
         self._init_vars()
         self._parse_argv()
+        if not xbmcvfs.exists(ADDON_DATA_PATH):
+            # addon data path does not exist...create it
+            xbmcvfs.mkdir(ADDON_DATA_PATH)
         if self.infos:
             self._StartInfoActions()
         if self.control == "plugin":
             xbmcplugin.endOfDirectory(self.handle)
-        if not xbmcvfs.exists(ADDON_DATA_PATH):
-            # addon data path does not exist...create it
-            xbmcvfs.mkdir(ADDON_DATA_PATH)
         while self.daemon and not xbmc.abortRequested:
             self.show_now = xbmc.getInfoLabel("ListItem.TVShowTitle")
             if self.show_now != self.show_prev and xbmc.getInfoLabel("ListItem.Property(WatchedEpisodes)") != self.show_watched:
@@ -391,5 +391,5 @@ class ColorBoxMonitor(xbmc.Monitor):
 
 
 if __name__ == "__main__":
-    Main()
+    ColorBoxMain()
 log('finished')
