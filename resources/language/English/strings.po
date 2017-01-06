@@ -1,99 +1,59 @@
-# XBMC Media Center language file
-# Addon Name: ToolBox Script
-# Addon id: script.toolbox
-# Addon version: 1.0.1
-# Addon Provider: phil65
+# Kodi Media Center language file
+# Addon Name: Mimic
+# Addon id: script.mimic.extras
+# Addon Provider: braz
 msgid ""
 msgstr ""
-"Project-Id-Version: XBMC-Addons\n"
+"Project-Id-Version: XBMC Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
-"POT-Creation-Date: 2014-10-26 17:05+0000\n"
+"POT-Creation-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Philipp Temminghoff <phil65@kodi.tv>\n"
-"Language-Team: LANGUAGE\n"
+"Last-Translator: Kodi Translation Team\n"
+"Language-Team: English (http://www.transifex.com/projects/p/xbmc-addons/language/en/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: en\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-msgctxt "Addon Summary"
-msgid "ToolBox Script"
+#Script labels
+
+msgctxt "#32000"
+msgid "View fanart"
 msgstr ""
-
-msgctxt "Addon Description"
-msgid "This script makes several python functions accessible for skinners."
-msgstr ""
-
 
 msgctxt "#32001"
-msgid "Export skin settings"
+msgid "Extended info"
 msgstr ""
 
 msgctxt "#32002"
-msgid "Import skin settings"
+msgid "Add to SimplePlaylists"
 msgstr ""
 
 msgctxt "#32003"
-msgid "Reset skin settings"
+msgid "Artwork Downloader"
 msgstr ""
 
 msgctxt "#32004"
-msgid "Choose action"
+msgid "Artwork Downloader (Manual)"
 msgstr ""
 
 msgctxt "#32005"
-msgid "Completed"
+msgid "Update IMDb ratings"
 msgstr ""
 
 msgctxt "#32006"
-msgid "Export successful"
+msgid "TvTunes"
 msgstr ""
 
 msgctxt "#32007"
-msgid "Error"
+msgid "Cinema Vision"
 msgstr ""
 
 msgctxt "#32008"
-msgid "guisettings.xml not found"
+msgid "VideoExtras"
 msgstr ""
 
 msgctxt "#32009"
-msgid "Import successful"
-msgstr ""
-
-msgctxt "#32010"
-msgid "Importing skin settings"
-msgstr ""
-
-msgctxt "#32011"
-msgid "Updating"
-msgstr ""
-
-msgctxt "#32012"
-msgid "City"
-msgstr ""
-
-msgctxt "#32013"
-msgid "Country"
-msgstr ""
-
-msgctxt "#32014"
-msgid "Add extrathumbs to library"
-msgstr ""
-
-msgctxt "#32015"
-msgid "Add extrafanart to movie library"
-msgstr ""
-
-msgctxt "#32016"
-msgid "Updating database with local art"
-msgstr ""
-
-msgctxt "#32017"
-msgid "Update all"
-msgstr ""
-
-msgctxt "#32018"
-msgid "Add extrafanart to TV show library"
+msgid "Add to Super Favourites"
 msgstr ""
