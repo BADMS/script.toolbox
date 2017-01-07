@@ -272,7 +272,7 @@ def Filter_Shiftblock(filterimage, blockSize=192, sigma=0.05, iterations=1920):
     return targetfile
 
 
-def Filter_Pixelshift(filterimage, ptype="none", pthreshold=100, pclength=50, pangle=0, prandomness=0):
+def Filter_Pixelshift(filterimage, ptype="none", pthreshold=100, pclength=50, pangle=00, prandomness=10):
     """stype; 1=random, 2=edges, 3=waves, 4=file, 5=file_edges, 0=none"""
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "pixelshift" + str(ptype) + str(pthreshold) + str(pclength) + str(pangle) + str(prandomness) + ".png"
@@ -312,6 +312,8 @@ def Filter_Pixelshift(filterimage, ptype="none", pthreshold=100, pclength=50, pa
                 xbmc.sleep(100)
         if not img:
             return ""
+        img.thumbnail((400, 400), Image.ANTIALIAS)
+        img = img.convert('RGB')
         img = Pixelshift_Image(img, ptype)
         img.save(targetfile)
     return targetfile
