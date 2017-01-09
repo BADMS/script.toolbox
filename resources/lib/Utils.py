@@ -316,7 +316,10 @@ def Filter_Pixelshift(filterimage, ptype="none", pthreshold=100, pclength=50, pa
         img = img.convert('RGB')
         img = Pixelshift_Image(img, ptype)
         img.save(targetfile)
-    return targetfile
+    else:
+        img = Image.open(targetfile)
+    imagecolor = Get_Colors(img)
+    return targetfile, imagecolor
 
 
 def Filter_Fakelight(filterimage, pixels):
