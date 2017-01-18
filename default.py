@@ -58,7 +58,7 @@ class ColorBoxMain:
                         self.image_prev_cpa = self.image_now_cpa
                         HOME.setProperty("OldImageColorcpa", HOME.getProperty("ImageColorcpa"))
                         HOME.setProperty("OldImageCColorcpa", HOME.getProperty("ImageCColorcpa"))
-                        HOME.setProperty('DaemonImageUpdating', '0')
+                        HOME.setProperty('DaemonPosterImageUpdating', '0')
                         if HOME.getProperty("cpa_daemon_set") == 'Blur':
                             image, imagecolor = Filter_Image(self.image_now_cpa, self.radius)
                             HOME.setProperty('ImageFiltercpa', image)
@@ -139,6 +139,7 @@ class ColorBoxMain:
                             HOME.setProperty('Imagecpa', self.image_now_cpa)
                     except:
                         log("Could not process image for cpa daemon")
+                HOME.setProperty('DaemonPosterImageUpdating', '1')
             if not HOME.getProperty("cfa_daemon_set") == 'None':
                 self.image_now_cfa = xbmc.getInfoLabel("ListItem.Art(fanart)")
                 if self.image_now_cfa != self.image_prev_cfa:
@@ -146,7 +147,7 @@ class ColorBoxMain:
                         self.image_prev_cfa = self.image_now_cfa
                         HOME.setProperty("OldImageColorcfa", HOME.getProperty("ImageColorcfa"))
                         HOME.setProperty("OldImageCColorcfa", HOME.getProperty("ImageCColorcfa"))
-                        HOME.setProperty('DaemonImageUpdating', '0')
+                        HOME.setProperty('DaemonFanartImageUpdating', '0')
                         if HOME.getProperty("cfa_daemon_set") == 'Blur':
                             image, imagecolor = Filter_Image(self.image_now_cfa, self.radius)
                             HOME.setProperty('ImageFiltercfa', image)
@@ -214,6 +215,7 @@ class ColorBoxMain:
                             HOME.setProperty("ImageCColorcfa", Complementary_Color(HOME.getProperty("ImageColorcfa")))
                     except:
                         log("Could not process image for cfa daemon")
+                HOME.setProperty('DaemonFanartImageUpdating', '1')
             if not HOME.getProperty("cha_daemon_set") == 'None':
                 self.image_now_cha = xbmc.getInfoLabel("Control.GetLabel(7977)")
                 if self.image_now_cha != self.image_prev_cha:
@@ -221,12 +223,13 @@ class ColorBoxMain:
                         self.image_prev_cha = self.image_now_cha
                         HOME.setProperty("OldImageColorcha", HOME.getProperty("ImageColorcha"))
                         HOME.setProperty("OldImageCColorcha", HOME.getProperty("ImageCColorcha"))
-                        HOME.setProperty('DaemonImageUpdating', '0')
+                        HOME.setProperty('DaemonFanartCCUpdating', '0')
                         imagecolor = Color_Only(self.image_now_cha)
                         HOME.setProperty("ImageColorcha", imagecolor)
                         HOME.setProperty("ImageCColorcha", Complementary_Color(imagecolor))
                     except:
                         log("Could not process image for cha daemon")
+                HOME.setProperty('DaemonFanartCCUpdating', '1')
             self.image_now = xbmc.getInfoLabel("Player.Art(thumb)")
             self.image_now_fa = xbmc.getInfoLabel("MusicPlayer.Property(Fanart_Image)")
             if self.image_now != self.image_prev and xbmc.Player().isPlayingAudio():
@@ -269,7 +272,6 @@ class ColorBoxMain:
                     HOME.setProperty("ImageColorfa5", Random_Color())
                 except:
                     log("Could not process image for fa daemon")
-            HOME.setProperty('DaemonImageUpdating', '1')
             xbmc.sleep(300)
 
     def _StartInfoActions(self):
@@ -290,8 +292,9 @@ class ColorBoxMain:
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
                 HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(imagecolor))
             elif info == 'pixelate':
+                imagecolor = Random_Color()
                 HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                HOME.setProperty(self.prefix + "ImageColor", Random_Color())
+                HOME.setProperty(self.prefix + "ImageColor", imagecolor)
                 HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(imagecolor))
                 image = Filter_Pixelate(self.id, self.pixels)
                 if image != "":
@@ -410,74 +413,3 @@ class ColorBoxMonitor(xbmc.Monitor):
 if __name__ == "__main__":
     ColorBoxMain()
 log('finished')
-
-
-def handleMenu(menu):
-    list  = []
-
-    for item in menu:
-        list.append(item[0])
-
-    param = xbmcgui.Dialog().contextmenu(list)
-
-    if param < 0:
-        return None
-
-    return menu[param][1]
-
-#build menu
-isMovie   = xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,movie)")
-isTVShow  = xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,tvshow)")
-isEpisode = xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,episode)")
-isMusic   = xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,musicvideo)")
-
-options = []
-
-options.append([LANGUAGE(32000), "SetFocus(90400)"])
-if xbmc.getCondVisibility("System.HasAddon(script.extendedinfo)"):
-    if isMovie:
-        options.append([LANGUAGE(32001), "RunScript(script.extendedinfo,info=extendedinfo,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)"))])
-    elif isTVShow:
-        options.append([LANGUAGE(32001), "RunScript(script.extendedinfo,info=extendedtvinfo,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)"))])
-
-if xbmc.getCondVisibility("System.HasAddon(plugin.program.super.favourites)"):
-    if isMovie or isTVShow:
-        options.append([LANGUAGE(32009), "RunScript(special://home/addons/plugin.program.super.favourites/menu_addtofaves.py)"])
-
-if xbmc.getCondVisibility("System.HasAddon(script.simpleplaylists)"):
-    if isMovie or isTVShow:
-        options.append([LANGUAGE(32002), "RunPlugin(plugin://script.simpleplaylists/?mode=addCurrentUrl)"])
-
-if xbmc.getCondVisibility("System.HasAddon(script.artwork.downloader)"):
-    if isMovie:
-        options.append([LANGUAGE(32003), "RunScript(script.artwork.downloader,mediatype=movie,dbid=%s)"          % xbmc.getInfoLabel("ListItem.DBID")])
-        options.append([LANGUAGE(32004), "RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=%s)" % xbmc.getInfoLabel("ListItem.DBID")])
-    elif isTVShow:
-        options.append([LANGUAGE(32003), "RunScript(script.artwork.downloader,mediatype=tvshow,dbid=%s)"          % xbmc.getInfoLabel("ListItem.DBID")])
-        options.append([LANGUAGE(32004), "RunScript(script.artwork.downloader,mode=gui,mediatype=tvshow,dbid=%s)" % xbmc.getInfoLabel("ListItem.DBID")])
-
-if xbmc.getCondVisibility("System.HasAddon(script.ratingupdate)"):
-    if isMovie or isTVShow:
-        options.append([LANGUAGE(32005), "RunScript(script.ratingupdate,Single=Movie)"])
-
-if xbmc.getCondVisibility('System.HasAddon(script.tvtunes) + String.IsEmpty(Window(movieinformation).Property("TvTunes_HideVideoInfoButton"))'):
-    if isMovie or isTVShow or isMusic:
-        options.append([LANGUAGE(32006), "RunScript(script.tvtunes,mode=solo)"])
-
-if xbmc.getCondVisibility("System.HasAddon(script.cinemavision)"):
-    if isMovie or isTVShow or isEpisode:
-        options.append([LANGUAGE(32007), "SPECIALCASE1"]) #because it does 2 things
-
-if xbmc.getCondVisibility("System.HasAddon(script.videoextras)"):
-    if isMovie or isEpisode or isMusic:
-        options.append([LANGUAGE(32008), "RunScript(script.videoextras,display,%s)" % (xbmc.getInfoLabel("ListItem.FilenameAndPath"))])
-    elif isTVShow:
-        options.append([LANGUAGE(32008), "RunScript(script.videoextras,display,%s)" % (xbmc.getInfoLabel("ListItem.Path"))])
-
-action = handleMenu(options)
-
-if action == 'SPECIALCASE1':
-    xbmc.executebuiltin("Dialog.Close(movieinformation)")
-    xbmc.executebuiltin("RunScript(script.cinemavision,experience)")
-else:
-    xbmc.executebuiltin('%s' % action)
