@@ -292,8 +292,8 @@ class ColorBoxMain:
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
                 HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(imagecolor))
             elif info == 'pixelate':
-                imagecolor = Random_Color()
                 HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
+                imagecolor = Random_Color()
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
                 HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(imagecolor))
                 image = Filter_Pixelate(self.id, self.pixels)
