@@ -24,6 +24,18 @@ class ColorBoxMain:
         log("version %s started" % ADDON_VERSION)
         self._init_vars()
         self._parse_argv()
+        HOME.setProperty("OldImageColorcpa", "FF000000")
+        HOME.setProperty("ImageColorcpa", "FF000000")
+        HOME.setProperty("OldImageCColorcpa", "FF000000")
+        HOME.setProperty("ImageCColorcpa", "FF000000")
+        HOME.setProperty("OldImageColorcfa", "FF000000")
+        HOME.setProperty("ImageColorcfa", "FF000000")
+        HOME.setProperty("OldImageCColorcfa", "FF000000")
+        HOME.setProperty("ImageCColorcfa", "FF000000")
+        HOME.setProperty("OldImageColorcha", "FF000000")
+        HOME.setProperty("ImageColorcha", "FF000000")
+        HOME.setProperty("OldImageCColorcha", "FF000000")
+        HOME.setProperty("ImageCColorcha", "FF000000")
         if not xbmcvfs.exists(ADDON_DATA_PATH):
             # addon data path does not exist...create it
             xbmcvfs.mkdir(ADDON_DATA_PATH)
@@ -62,8 +74,11 @@ class ColorBoxMain:
                         if HOME.getProperty("cpa_daemon_set") == 'Blur':
                             image, imagecolor, cimagecolor = Filter_Image(self.image_now_cpa, self.radius)
                             HOME.setProperty('ImageFiltercpa', image)
-                            HOME.setProperty("ImageColorcpa", imagecolor)
-                            HOME.setProperty("ImageCColorcpa", cimagecolor)
+
+                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 100)
+
+
                             HOME.setProperty('Imagecpa', self.image_now_cpa)
                         elif HOME.getProperty("cpa_daemon_set") == 'Pixelate':
                             image = Filter_Pixelate(self.image_now_cpa, self.pixels)
@@ -98,38 +113,50 @@ class ColorBoxMain:
                         elif HOME.getProperty("cpa_daemon_set") == 'Pixel none':
                             image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cpa, "none")
                             HOME.setProperty('ImageFiltercpa', image)
-                            HOME.setProperty("ImageColorcpa", imagecolor)
-                            HOME.setProperty("ImageCColorcpa", cimagecolor)
+
+                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 100)
+
                             HOME.setProperty('Imagecpa', self.image_now_cpa)
                         elif HOME.getProperty("cpa_daemon_set") == 'Pixel waves':
                             image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cpa, "waves")
                             HOME.setProperty('ImageFiltercpa', image)
-                            HOME.setProperty("ImageColorcpa", imagecolor)
-                            HOME.setProperty("ImageCColorcpa", cimagecolor)
+
+                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 100)
+
                             HOME.setProperty('Imagecpa', self.image_now_cpa)
                         elif HOME.getProperty("cpa_daemon_set") == 'Pixel random':
                             image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cpa, "random")
                             HOME.setProperty('ImageFiltercpa', image)
-                            HOME.setProperty("ImageColorcpa", imagecolor)
-                            HOME.setProperty("ImageCColorcpa", cimagecolor)
+
+                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 100)
+
                             HOME.setProperty('Imagecpa', self.image_now_cpa)
                         elif HOME.getProperty("cpa_daemon_set") == 'Pixel file':
                             image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cpa, "file")
                             HOME.setProperty('ImageFiltercpa', image)
-                            HOME.setProperty("ImageColorcpa", imagecolor)
-                            HOME.setProperty("ImageCColorcpa", cimagecolor)
+
+                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 100)
+
                             HOME.setProperty('Imagecpa', self.image_now_cpa)
                         elif HOME.getProperty("cpa_daemon_set") == 'Pixel edges':
                             image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cpa, "edges")
                             HOME.setProperty('ImageFiltercpa', image)
-                            HOME.setProperty("ImageColorcpa", imagecolor)
-                            HOME.setProperty("ImageCColorcpa", cimagecolor)
+
+                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 100)
+
                             HOME.setProperty('Imagecpa', self.image_now_cpa)
                         elif HOME.getProperty("cpa_daemon_set") == 'Pixel fedges':
                             image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cpa, "fedges")
                             HOME.setProperty('ImageFiltercpa', image)
-                            HOME.setProperty("ImageColorcpa", imagecolor)
-                            HOME.setProperty("ImageCColorcpa", cimagecolor)
+
+                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 100)
+
                             HOME.setProperty('Imagecpa', self.image_now_cpa)
                         elif HOME.getProperty("cpa_daemon_set") == 'Fake light':
                             image = Filter_Fakelight(self.image_now_cpa, pixels=192)
@@ -138,8 +165,8 @@ class ColorBoxMain:
                             
                             HOME.setProperty('Imagecpa', self.image_now_cpa)
                     except:
-                        HOME.setProperty('DaemonPosterImageUpdating', '1')
-                        log("Could not process image for cpa daemon")
+                        HOME.setProperty('DaemonFanartImageUpdating', '1')
+                        log("Could not process image for cfa daemon")
                     HOME.setProperty('DaemonPosterImageUpdating', '1')
             if not HOME.getProperty("cfa_daemon_set") == 'None':
                 self.image_now_cfa = xbmc.getInfoLabel("ListItem.Art(fanart)")
@@ -152,8 +179,10 @@ class ColorBoxMain:
                         if HOME.getProperty("cfa_daemon_set") == 'Blur':
                             image, imagecolor, cimagecolor = Filter_Image(self.image_now_cfa, self.radius)
                             HOME.setProperty('ImageFiltercfa', image)
-                            HOME.setProperty("ImageColorcfa", imagecolor)
-                            HOME.setProperty("ImageCColorcfa", cimagecolor)
+
+                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 100)
+
                         elif HOME.getProperty("cfa_daemon_set") == 'Pixelate':
                             image = Filter_Pixelate(self.image_now_cfa, self.pixels)
                             HOME.setProperty('ImageFiltercfa', image)
@@ -182,33 +211,45 @@ class ColorBoxMain:
                         elif HOME.getProperty("cfa_daemon_set") == 'Pixel none':
                             image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cfa, "none")
                             HOME.setProperty('ImageFiltercfa', image)
-                            HOME.setProperty("ImageColorcfa", imagecolor)
-                            HOME.setProperty("ImageCColorcfa", cimagecolor)
+
+                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 100)
+
                         elif HOME.getProperty("cfa_daemon_set") == 'Pixel waves':
                             image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cfa, "waves")
                             HOME.setProperty('ImageFiltercfa', image)
-                            HOME.setProperty("ImageColorcfa", imagecolor)
-                            HOME.setProperty("ImageCColorcfa", cimagecolor)
+
+                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 100)
+
                         elif HOME.getProperty("cfa_daemon_set") == 'Pixel random':
                             image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cfa, "random")
                             HOME.setProperty('ImageFiltercfa', image)
-                            HOME.setProperty("ImageColorcfa", imagecolor)
-                            HOME.setProperty("ImageCColorcfa", cimagecolor)
+
+                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 100)
+
                         elif HOME.getProperty("cfa_daemon_set") == 'Pixel file':
                             image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cfa, "file")
                             HOME.setProperty('ImageFiltercfa', image)
-                            HOME.setProperty("ImageColorcfa", imagecolor)
-                            HOME.setProperty("ImageCColorcfa", cimagecolor)
+
+                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 100)
+
                         elif HOME.getProperty("cfa_daemon_set") == 'Pixel edges':
                             image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cfa, "edges")
                             HOME.setProperty('ImageFiltercfa', image)
-                            HOME.setProperty("ImageColorcfa", imagecolor)
-                            HOME.setProperty("ImageCColorcfa", cimagecolor)
+
+                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 100)
+
                         elif HOME.getProperty("cfa_daemon_set") == 'Pixel fedges':
                             image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cfa, "fedges")
                             HOME.setProperty('ImageFiltercfa', image)
-                            HOME.setProperty("ImageColorcfa", imagecolor)
-                            HOME.setProperty("ImageCColorcfa", cimagecolor)
+
+                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 100)
+                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 100)
+
                         elif HOME.getProperty("cfa_daemon_set") == 'Fake light':
                             image = Filter_Fakelight(self.image_now_cfa, pixels=192)
                             HOME.setProperty('ImageFiltercfa', image)
@@ -227,6 +268,7 @@ class ColorBoxMain:
                         HOME.setProperty("OldImageCColorcha", HOME.getProperty("ImageCColorcha"))
                         HOME.setProperty('DaemonFanartCCUpdating', '0')
                         Color_Only(self.image_now_cha, "ImageColorcha", "ImageCColorcha")
+
                         HOME.setProperty('DaemonFanartCCUpdating', '1')
                     except:
                         HOME.setProperty('DaemonFanartCCUpdating', '1')
