@@ -71,7 +71,7 @@ script.colorbox
 
 - Window properties:
 
-  Window(home).Property(RETURN_IMAGE_ID.Image)
+  Window(home).Property(RETURN_IMAGE_ID.ImageFilter)
   
   Window(home).Property(RETURN_IMAGE_ID.ImageColor) <- only available with 'blur' and 'randomcolor'
 
