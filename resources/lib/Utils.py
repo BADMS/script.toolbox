@@ -552,7 +552,7 @@ def clamp(x):
     return max(0, min(x, 255))
 
 
-def linear_gradient(var1, start_hex="000000", finish_hex="FFFFFF", n=10, sleep=0.00005):
+def linear_gradient(var1, start_hex="000000", finish_hex="FFFFFF", n=10, sleep=0.005):
     ''' returns a gradient list of (n) colors between
     two hex colors. start_hex and finish_hex
     should be the full six-digit color string,
