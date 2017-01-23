@@ -321,7 +321,7 @@ class ColorBoxMain:
         for info in self.infos:
             if info == 'randomcolor':
                 HOME.setProperty(self.prefix + "ImageColor", Random_Color())
-                HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(imagecolor))
+                HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(HOME.getProperty(self.prefix + "ImageColor")))
             elif info == 'percentage':
                 Show_Percentage()
             elif info == 'bluronly':

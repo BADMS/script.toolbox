@@ -121,7 +121,6 @@ def Color_Only(filterimage, var1, var2):
                 return "", ""
             img.thumbnail((200, 200))
             img = img.convert('RGB')
-            img.save(targetfile)
         else:
             img = Image.open(targetfile)
         imagecolor, cimagecolor = Get_Colors(img, md5)
