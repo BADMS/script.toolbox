@@ -28,7 +28,7 @@ randomness = int(0)
 threshold = int(100)
 clength = int(50)
 angle = float(0)
-colors_dict={}
+colors_dict = {}
 
 
 def Random_Color():
@@ -90,33 +90,8 @@ def Color_Only(filterimage, var1, var2):
     if md5 not in colors_dict:
         filename = md5 + ".png"
         targetfile = os.path.join(ADDON_DATA_PATH, filename)
-        cachedthumb = xbmc.getCacheThumbName(filterimage)
-        xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-        xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
-        if filterimage == "":
-            return "", ""
         if not xbmcvfs.exists(targetfile):
-            img = None
-            for i in range(1, 4):
-                try:
-                    if xbmcvfs.exists(xbmc_cache_file):
-                        
-                        img = Image.open(xbmc.translatePath(xbmc_cache_file))
-                        break
-                    elif xbmcvfs.exists(xbmc_vid_cache_file):
-                        
-                        img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
-                        break
-                    else:
-                        filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
-                        if filterimage.endswith("/"):
-                            filterimage = filterimage[:-1]
-                        
-                        xbmcvfs.copy(filterimage, targetfile)
-                        img = Image.open(targetfile)
-                        break
-                except:
-                    xbmc.sleep(200)
+            img = XBMC_Cache_Check(filterimage)
             if not img:
                 return "", ""
             img.thumbnail((200, 200))
@@ -140,37 +115,12 @@ def Color_Only(filterimage, var1, var2):
     return imagecolor, cimagecolor
 
 
-def Filter_Image(filterimage, radius):
+def Filter_Blur(filterimage, radius):
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + str(radius) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
-    cachedthumb = xbmc.getCacheThumbName(filterimage)
-    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
-    if filterimage == "":
-        return "", "", ""
     if not xbmcvfs.exists(targetfile):
-        img = None
-        for i in range(1, 4):
-            try:
-                if xbmcvfs.exists(xbmc_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
-                    break
-                elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
-                    break
-                else:
-                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
-                    if filterimage.endswith("/"):
-                        filterimage = filterimage[:-1]
-                    
-                    xbmcvfs.copy(filterimage, targetfile)
-                    img = Image.open(targetfile)
-                    break
-            except:
-                xbmc.sleep(100)
+        img = XBMC_Cache_Check(filterimage)
         if not img:
             return "", "", ""
         img.thumbnail((200, 200), Image.ANTIALIAS)
@@ -184,38 +134,12 @@ def Filter_Image(filterimage, radius):
     return targetfile, imagecolor, cimagecolor
 
 
-def Filter_ImageOnly(filterimage, radius):
+def Filter_BlurOnly(filterimage, radius):
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + str(radius) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
-    cachedthumb = xbmc.getCacheThumbName(filterimage)
-    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
-    if filterimage == "":
-        return ""
     if not xbmcvfs.exists(targetfile):
-        img = None
-        for i in range(1, 4):
-            try:
-                if xbmcvfs.exists(xbmc_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
-                    break
-                elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
-                    break
-                else:
-                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
-                    if filterimage.endswith("/"):
-                        filterimage = filterimage[:-1]
-                    
-                    xbmcvfs.copy(filterimage, targetfile)
-                    img = Image.open(targetfile)
-                    break
-            except:
-                
-                xbmc.sleep(100)
+        img = XBMC_Cache_Check(filterimage)
         if not img:
             return ""
         img.thumbnail((200, 200), Image.ANTIALIAS)
@@ -230,31 +154,8 @@ def Filter_Pixelate(filterimage, pixels):
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "pixel" + str(pixels) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
-    cachedthumb = xbmc.getCacheThumbName(filterimage)
-    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
-    if filterimage == "":
-        return ""
     if not xbmcvfs.exists(targetfile):
-        img = None
-        for i in range(1, 4):
-            try:
-                if xbmcvfs.exists(xbmc_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
-                    break
-                elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
-                    break
-                else:
-                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
-                    if filterimage.endswith("/"):
-                        filterimage = filterimage[:-1]
-                    xbmcvfs.copy(filterimage, targetfile)
-                    img = Image.open(targetfile)
-                    break
-            except:
-                xbmc.sleep(100)
+        img = XBMC_Cache_Check(filterimage)
         if not img:
             return ""
         img = Pixelate_Image(img,pixels)
@@ -266,31 +167,8 @@ def Filter_Shiftblock(filterimage, blockSize=192, sigma=0.05, iterations=1920):
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "shift" + str(blockSize) + str(sigma) + str(iterations) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
-    cachedthumb = xbmc.getCacheThumbName(filterimage)
-    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
-    if filterimage == "":
-        return ""
     if not xbmcvfs.exists(targetfile):
-        img = None
-        for i in range(1, 4):
-            try:
-                if xbmcvfs.exists(xbmc_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
-                    break
-                elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
-                    break
-                else:
-                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
-                    if filterimage.endswith("/"):
-                        filterimage = filterimage[:-1]
-                    xbmcvfs.copy(filterimage, targetfile)
-                    img = Image.open(targetfile)
-                    break
-            except:
-                xbmc.sleep(100)
+        img = XBMC_Cache_Check(filterimage)
         if not img:
             return ""
         img = Shiftblock_Image(img, blockSize, sigma, iterations)
@@ -303,9 +181,6 @@ def Filter_Pixelshift(filterimage, ptype="none", pthreshold=100, pclength=50, pa
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "pixelshift" + str(ptype) + str(pthreshold) + str(pclength) + str(pangle) + str(prandomness) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
-    cachedthumb = xbmc.getCacheThumbName(filterimage)
-    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
     global threshold
     threshold = int(pthreshold)
     global clength
@@ -314,28 +189,8 @@ def Filter_Pixelshift(filterimage, ptype="none", pthreshold=100, pclength=50, pa
     angle = int(pangle)
     global randomness
     randomness = float(prandomness)
-    if filterimage == "":
-        return ""
     if not xbmcvfs.exists(targetfile):
-        img = None
-        for i in range(1, 4):
-            try:
-                if xbmcvfs.exists(xbmc_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
-                    break
-                elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
-                    break
-                else:
-                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
-                    if filterimage.endswith("/"):
-                        filterimage = filterimage[:-1]
-                    xbmcvfs.copy(filterimage, targetfile)
-                    img = Image.open(targetfile)
-                    break
-            except:
-                xbmc.sleep(100)
+        img = XBMC_Cache_Check(filterimage)
         if not img:
             return ""
         img.thumbnail((400, 400), Image.ANTIALIAS)
@@ -348,35 +203,12 @@ def Filter_Pixelshift(filterimage, ptype="none", pthreshold=100, pclength=50, pa
     return targetfile, imagecolor, cimagecolor
 
 
-def Filter_Fakelight(filterimage, pixels):
+def Filter_Fakelight(filterimage, pixels=192):
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "fakelight" + str(pixels) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
-    cachedthumb = xbmc.getCacheThumbName(filterimage)
-    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
-    if filterimage == "":
-        return ""
     if not xbmcvfs.exists(targetfile):
-        img = None
-        for i in range(1, 4):
-            try:
-                if xbmcvfs.exists(xbmc_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
-                    break
-                elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
-                    break
-                else:
-                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
-                    if filterimage.endswith("/"):
-                        filterimage = filterimage[:-1]
-                    xbmcvfs.copy(filterimage, targetfile)
-                    img = Image.open(targetfile)
-                    break
-            except:
-                xbmc.sleep(100)
+        img = XBMC_Cache_Check(filterimage)
         if not img:
             return ""
         img = fake_light(img,pixels)
@@ -388,34 +220,8 @@ def Filter_Twotone(filterimage, black, white):
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "twotone" + str(black) + str(white) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
-    cachedthumb = xbmc.getCacheThumbName(filterimage)
-    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
-    if filterimage == "":
-        return ""
     if not xbmcvfs.exists(targetfile):
-        img = None
-        for i in range(1, 4):
-            try:
-                if xbmcvfs.exists(xbmc_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
-                    break
-                elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
-                    break
-                else:
-                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
-                    if filterimage.endswith("/"):
-                        filterimage = filterimage[:-1]
-                    
-                    xbmcvfs.copy(filterimage, targetfile)
-                    img = Image.open(targetfile)
-                    break
-            except:
-                
-                xbmc.sleep(100)
+        img = XBMC_Cache_Check(filterimage)
         if not img:
             return ""
         img = image_recolorize(img,black,white)
@@ -427,34 +233,8 @@ def Filter_Posterize(filterimage, bits):
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "posterize" + str(bits) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
-    cachedthumb = xbmc.getCacheThumbName(filterimage)
-    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
-    if filterimage == "":
-        return ""
     if not xbmcvfs.exists(targetfile):
-        img = None
-        for i in range(1, 4):
-            try:
-                if xbmcvfs.exists(xbmc_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
-                    break
-                elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
-                    break
-                else:
-                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
-                    if filterimage.endswith("/"):
-                        filterimage = filterimage[:-1]
-                    
-                    xbmcvfs.copy(filterimage, targetfile)
-                    img = Image.open(targetfile)
-                    break
-            except:
-                
-                xbmc.sleep(100)
+        img = XBMC_Cache_Check(filterimage)
         if not img:
             return ""
         img = image_posterize(img,bits)
@@ -466,39 +246,44 @@ def Filter_Distort(filterimage, delta_x, delta_y):
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "distort" + str(delta_x) + str(delta_y) + ".png"
     targetfile = os.path.join(ADDON_DATA_PATH, filename)
-    cachedthumb = xbmc.getCacheThumbName(filterimage)
-    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
-    if filterimage == "":
-        return ""
     if not xbmcvfs.exists(targetfile):
-        img = None
-        for i in range(1, 4):
-            try:
-                if xbmcvfs.exists(xbmc_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_cache_file))
-                    break
-                elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    
-                    img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
-                    break
-                else:
-                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
-                    if filterimage.endswith("/"):
-                        filterimage = filterimage[:-1]
-                    
-                    xbmcvfs.copy(filterimage, targetfile)
-                    img = Image.open(targetfile)
-                    break
-            except:
-                
-                xbmc.sleep(100)
+        img = XBMC_Cache_Check(filterimage)
         if not img:
             return ""
+        img.thumbnail((400, 400), Image.ANTIALIAS)
+        img = img.convert('RGB')
         img = image_distort(img,delta_x,delta_y)
         img.save(targetfile)
     return targetfile
+
+
+def XBMC_Cache_Check(filterimage):
+    cachedthumb = xbmc.getCacheThumbName(filterimage)
+    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
+    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
+    img = None
+    cachedthumb = xbmc.getCacheThumbName(filterimage)
+    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
+    xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
+    for i in range(1, 4):
+        try:
+            if xbmcvfs.exists(xbmc_cache_file):
+                
+                img = Image.open(xbmc.translatePath(xbmc_cache_file))
+                break
+            elif xbmcvfs.exists(xbmc_vid_cache_file):
+                img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
+                break
+            else:
+                filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
+                if filterimage.endswith("/"):
+                    filterimage = filterimage[:-1]
+                xbmcvfs.copy(filterimage, targetfile)
+                img = Image.open(targetfile)
+                break
+        except:
+            xbmc.sleep(100)
+    return img
 
 
 def Get_Colors(img, md5):
@@ -530,8 +315,6 @@ def Get_Colors(img, md5):
     else:
         imagecolor, cimagecolor = colors_dict[md5].split(':')
     return imagecolor, cimagecolor
-
-
 
 
 def Get_Frequent_Color(img):

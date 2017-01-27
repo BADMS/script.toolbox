@@ -10,9 +10,7 @@ ADDON_LANGUAGE = ADDON.getLocalizedString
 ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID))
-ADDON_COLORS = os.path.join(ADDON_DATA_PATH, "colors.txt")
 HOME = xbmcgui.Window(10000)
-LANGUAGE = ADDON.getLocalizedString
 
 sys.path.append(xbmc.translatePath(os.path.join(ADDON_PATH, 'resources', 'lib')))
 
@@ -72,7 +70,7 @@ class ColorBoxMain:
                         HOME.setProperty("OldImageCColorcpa", HOME.getProperty("ImageCColorcpa"))
                         HOME.setProperty('DaemonPosterImageUpdating', '0')
                         if HOME.getProperty("cpa_daemon_set") == 'Blur':
-                            image, imagecolor, cimagecolor = Filter_Image(self.image_now_cpa, self.radius)
+                            image, imagecolor, cimagecolor = Filter_Blur(self.image_now_cpa, self.radius)
                             HOME.setProperty('ImageFiltercpa', image)
 
                             linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 50)
@@ -159,7 +157,7 @@ class ColorBoxMain:
 
                             HOME.setProperty('Imagecpa', self.image_now_cpa)
                         elif HOME.getProperty("cpa_daemon_set") == 'Fake light':
-                            image = Filter_Fakelight(self.image_now_cpa, pixels=192)
+                            image = Filter_Fakelight(self.image_now_cpa, pixels)
                             HOME.setProperty('ImageFiltercpa', image)
                             Color_Only(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa")
                             
@@ -177,7 +175,7 @@ class ColorBoxMain:
                         HOME.setProperty("OldImageCColorcfa", HOME.getProperty("ImageCColorcfa"))
                         HOME.setProperty('DaemonFanartImageUpdating', '0')
                         if HOME.getProperty("cfa_daemon_set") == 'Blur':
-                            image, imagecolor, cimagecolor = Filter_Image(self.image_now_cfa, self.radius)
+                            image, imagecolor, cimagecolor = Filter_Blur(self.image_now_cfa, self.radius)
                             HOME.setProperty('ImageFiltercfa', image)
 
                             linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 50)
@@ -278,7 +276,7 @@ class ColorBoxMain:
             if self.image_now != self.image_prev and xbmc.Player().isPlayingAudio():
                 try:
                     self.image_prev = self.image_now
-                    image, imagecolor, cimagecolor = Filter_Image(self.image_now, self.radius)
+                    image, imagecolor, cimagecolor = Filter_Blur(self.image_now, self.radius)
                     HOME.setProperty('ImageFilter1', image)
                     HOME.setProperty("ImageColor1", imagecolor)
                     image = Filter_Pixelate(self.image_now, self.pixels)
@@ -298,7 +296,7 @@ class ColorBoxMain:
             if self.image_now_fa != self.image_prev_fa and xbmc.Player().isPlayingAudio():
                 try:
                     self.image_prev_fa = self.image_now_fa
-                    image, imagecolor, cimagecolor = Filter_Image(self.image_now_fa, self.radius)
+                    image, imagecolor, cimagecolor = Filter_Blur(self.image_now_fa, self.radius)
                     HOME.setProperty('ImageFilterfa1', image)
                     HOME.setProperty("ImageColorfa1", imagecolor)
                     image = Filter_Pixelate(self.image_now_fa, self.pixels)
@@ -326,11 +324,11 @@ class ColorBoxMain:
                 Show_Percentage()
             elif info == 'bluronly':
                 HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = Filter_ImageOnly(self.id, self.radius)
+                image = Filter_BlurOnly(self.id, self.radius)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
             elif info == 'blur':
                 HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image, imagecolor, cimagecolor = Filter_Image(self.id, self.radius)
+                image, imagecolor, cimagecolor = Filter_Blur(self.id, self.radius)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
                 HOME.setProperty(self.prefix + "ImageCColor", cimagecolor)
@@ -448,7 +446,7 @@ class ColorBoxMonitor(xbmc.Monitor):
         pass
         # HOME.clearProperty(self.prefix + 'ImageFilter')
         # Notify("test", "test")
-        # image, imagecolor, cimagecolor = Filter_Image(self.id, self.radius)
+        # image, imagecolor, cimagecolor = Filter_Blur(self.id, self.radius)
         # HOME.setProperty(self.prefix + 'ImageFilter', image)
         # HOME.setProperty(self.prefix + "ImageColor", imagecolor)
 
