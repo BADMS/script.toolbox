@@ -1,8 +1,9 @@
-import sys
-import os
+import os, sys
+import hashlib
 import xbmc
 import xbmcgui
 import xbmcaddon
+import xbmcvfs
 
 ADDON = xbmcaddon.Addon()
 ADDON_VERSION = ADDON.getAddonInfo('version')
@@ -10,13 +11,23 @@ ADDON_LANGUAGE = ADDON.getLocalizedString
 ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID))
-ADDON_COLORS = os.path.join(ADDON_DATA_PATH, "colors.txt")
 HOME = xbmcgui.Window(10000)
-LANGUAGE = ADDON.getLocalizedString
 
 sys.path.append(xbmc.translatePath(os.path.join(ADDON_PATH, 'resources', 'lib')))
 
 from Utils import *
+
+ColorBox_function_map = {
+        'blur': blur,
+        'pixelate': pixelate,
+        'shiftblock': shiftblock,
+        'pixelshift': pixelshift,
+        'fakelight': fakelight,
+        'twotone': twotone,
+        'posterize': posterize,
+        'distort': distort
+}
+
 
 class ColorBoxMain:
 
@@ -49,7 +60,8 @@ class ColorBoxMain:
                 self.show_watched = xbmc.getInfoLabel("ListItem.Property(WatchedEpisodes)")
                 self.show_prev = self.show_now
                 Show_Percentage()
-            if not HOME.getProperty("cpa_daemon_set") == 'None':
+            cpa_daemon_set = HOME.getProperty("cpa_daemon_set")
+            if not cpa_daemon_set == 'None':
                 self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(poster)")
                 if xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,episode)"):
                     self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(thumb)")
@@ -66,199 +78,45 @@ class ColorBoxMain:
                 elif self.image_now_cpa == '' and HOME.getProperty("cpa_daemon_fallback") != '':
                     self.image_now_cpa = HOME.getProperty("cpa_daemon_fallback")
                 if self.image_now_cpa != self.image_prev_cpa:
+                    HOME.setProperty('DaemonPosterImageUpdating', '0')
                     try:
                         self.image_prev_cpa = self.image_now_cpa
                         HOME.setProperty("OldImageColorcpa", HOME.getProperty("ImageColorcpa"))
                         HOME.setProperty("OldImageCColorcpa", HOME.getProperty("ImageCColorcpa"))
-                        HOME.setProperty('DaemonPosterImageUpdating', '0')
-                        if HOME.getProperty("cpa_daemon_set") == 'Blur':
-                            image, imagecolor, cimagecolor = Filter_Image(self.image_now_cpa, self.radius)
-                            HOME.setProperty('ImageFiltercpa', image)
-
-                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 50)
 
 
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
-                        elif HOME.getProperty("cpa_daemon_set") == 'Pixelate':
-                            image = Filter_Pixelate(self.image_now_cpa, self.pixels)
-                            HOME.setProperty('ImageFiltercpa', image)
-                            Color_Only(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa")
+                        HOME.setProperty('ImageFiltercpa', ColorBox_function_map[cpa_daemon_set](self.image_now_cpa))
+
+                        Color_Only(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa")
+
+
+                        HOME.setProperty('Imagecpa', self.image_now_cpa)
                             
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
-                        elif HOME.getProperty("cpa_daemon_set") == 'Posterize':
-                            image = Filter_Posterize(self.image_now_cpa, self.bits)
-                            HOME.setProperty('ImageFiltercpa', image)
-                            Color_Only(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa")
-                            
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
-                        elif HOME.getProperty("cpa_daemon_set") == 'Distort':
-                            image = Filter_Distort(self.image_now_cpa, self.delta_x, self.delta_y)
-                            HOME.setProperty('ImageFiltercpa', image)
-                            Color_Only(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa")
-                            
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
-                        elif HOME.getProperty("cpa_daemon_set") == 'Two tone':
-                            image = Filter_Twotone(self.image_now_cpa, self.black, self.white)
-                            HOME.setProperty('ImageFiltercpa', image)
-                            Color_Only(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa")
-                            
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
-                        elif HOME.getProperty("cpa_daemon_set") == 'Shift block':
-                            image = Filter_Shiftblock(self.image_now_cpa)
-                            HOME.setProperty('ImageFiltercpa', image)
-                            Color_Only(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa")
-                            
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
-                        elif HOME.getProperty("cpa_daemon_set") == 'Pixel none':
-                            image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cpa, "none")
-                            HOME.setProperty('ImageFiltercpa', image)
-
-                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 50)
-
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
-                        elif HOME.getProperty("cpa_daemon_set") == 'Pixel waves':
-                            image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cpa, "waves")
-                            HOME.setProperty('ImageFiltercpa', image)
-
-                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 50)
-
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
-                        elif HOME.getProperty("cpa_daemon_set") == 'Pixel random':
-                            image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cpa, "random")
-                            HOME.setProperty('ImageFiltercpa', image)
-
-                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 50)
-
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
-                        elif HOME.getProperty("cpa_daemon_set") == 'Pixel file':
-                            image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cpa, "file")
-                            HOME.setProperty('ImageFiltercpa', image)
-
-                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 50)
-
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
-                        elif HOME.getProperty("cpa_daemon_set") == 'Pixel edges':
-                            image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cpa, "edges")
-                            HOME.setProperty('ImageFiltercpa', image)
-
-                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 50)
-
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
-                        elif HOME.getProperty("cpa_daemon_set") == 'Pixel fedges':
-                            image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cpa, "fedges")
-                            HOME.setProperty('ImageFiltercpa', image)
-
-                            linear_gradient("ImageColorcpa", HOME.getProperty("OldImageColorcpa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcpa", HOME.getProperty("OldImageCColorcpa")[2:8], cimagecolor[2:8], 50)
-
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
-                        elif HOME.getProperty("cpa_daemon_set") == 'Fake light':
-                            image = Filter_Fakelight(self.image_now_cpa, pixels=192)
-                            HOME.setProperty('ImageFiltercpa', image)
-                            Color_Only(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa")
-                            
-                            HOME.setProperty('Imagecpa', self.image_now_cpa)
                     except:
-                        HOME.setProperty('DaemonPosterImageUpdating', '1')
                         log("Could not process image for cfa daemon")
+
                     HOME.setProperty('DaemonPosterImageUpdating', '1')
-            if not HOME.getProperty("cfa_daemon_set") == 'None':
+
+            cfa_daemon_set = HOME.getProperty("cfa_daemon_set")
+            #curr_window = xbmc.getInfoLabel("Window.Property(xmlfile)")
+            if not cfa_daemon_set == 'None':
                 self.image_now_cfa = xbmc.getInfoLabel("ListItem.Art(fanart)")
                 if self.image_now_cfa != self.image_prev_cfa:
+                    HOME.setProperty('DaemonFanartImageUpdating', '0')
                     try:
                         self.image_prev_cfa = self.image_now_cfa
                         HOME.setProperty("OldImageColorcfa", HOME.getProperty("ImageColorcfa"))
                         HOME.setProperty("OldImageCColorcfa", HOME.getProperty("ImageCColorcfa"))
-                        HOME.setProperty('DaemonFanartImageUpdating', '0')
-                        if HOME.getProperty("cfa_daemon_set") == 'Blur':
-                            image, imagecolor, cimagecolor = Filter_Image(self.image_now_cfa, self.radius)
-                            HOME.setProperty('ImageFiltercfa', image)
 
-                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 50)
 
-                        elif HOME.getProperty("cfa_daemon_set") == 'Pixelate':
-                            image = Filter_Pixelate(self.image_now_cfa, self.pixels)
-                            HOME.setProperty('ImageFiltercfa', image)
-                            Color_Only(self.image_now_cfa, "ImageColorcfa", "ImageCColorcfa")
-                            
-                        elif HOME.getProperty("cfa_daemon_set") == 'Posterize':
-                            image = Filter_Posterize(self.image_now_cfa, self.bits)
-                            HOME.setProperty('ImageFiltercfa', image)
-                            Color_Only(self.image_now_cfa, "ImageColorcfa", "ImageCColorcfa")
-                            
-                        elif HOME.getProperty("cfa_daemon_set") == 'Distort':
-                            image = Filter_Distort(self.image_now_cfa, self.delta_x, self.delta_y)
-                            HOME.setProperty('ImageFiltercfa', image)
-                            Color_Only(self.image_now_cfa, "ImageColorcfa", "ImageCColorcfa")
-                            
-                        elif HOME.getProperty("cfa_daemon_set") == 'Two tone':
-                            image = Filter_Twotone(self.image_now_cfa, self.black, self.white)
-                            HOME.setProperty('ImageFiltercfa', image)
-                            Color_Only(self.image_now_cfa, "ImageColorcfa", "ImageCColorcfa")
-                            
-                        elif HOME.getProperty("cfa_daemon_set") == 'Shift block':
-                            image = Filter_Shiftblock(self.image_now_cfa)
-                            HOME.setProperty('ImageFiltercfa', image)
-                            Color_Only(self.image_now_cfa, "ImageColorcfa", "ImageCColorcfa")
-                            
-                        elif HOME.getProperty("cfa_daemon_set") == 'Pixel none':
-                            image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cfa, "none")
-                            HOME.setProperty('ImageFiltercfa', image)
+                        HOME.setProperty('ImageFiltercfa', ColorBox_function_map[cfa_daemon_set](self.image_now_cfa))
 
-                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 50)
+                        Color_Only(self.image_now_cfa, "ImageColorcfa", "ImageCColorcfa")
 
-                        elif HOME.getProperty("cfa_daemon_set") == 'Pixel waves':
-                            image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cfa, "waves")
-                            HOME.setProperty('ImageFiltercfa', image)
 
-                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 50)
-
-                        elif HOME.getProperty("cfa_daemon_set") == 'Pixel random':
-                            image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cfa, "random")
-                            HOME.setProperty('ImageFiltercfa', image)
-
-                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 50)
-
-                        elif HOME.getProperty("cfa_daemon_set") == 'Pixel file':
-                            image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cfa, "file")
-                            HOME.setProperty('ImageFiltercfa', image)
-
-                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 50)
-
-                        elif HOME.getProperty("cfa_daemon_set") == 'Pixel edges':
-                            image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cfa, "edges")
-                            HOME.setProperty('ImageFiltercfa', image)
-
-                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 50)
-
-                        elif HOME.getProperty("cfa_daemon_set") == 'Pixel fedges':
-                            image, imagecolor, cimagecolor = Filter_Pixelshift(self.image_now_cfa, "fedges")
-                            HOME.setProperty('ImageFiltercfa', image)
-
-                            linear_gradient("ImageColorcfa", HOME.getProperty("OldImageColorcfa")[2:8], imagecolor[2:8], 50)
-                            linear_gradient("ImageCColorcfa", HOME.getProperty("OldImageCColorcfa")[2:8], cimagecolor[2:8], 50)
-
-                        elif HOME.getProperty("cfa_daemon_set") == 'Fake light':
-                            image = Filter_Fakelight(self.image_now_cfa, pixels=192)
-                            HOME.setProperty('ImageFiltercfa', image)
-                            Color_Only(self.image_now_cfa, "ImageColorcfa", "ImageCColorcfa")
-                            
-                        HOME.setProperty('DaemonFanartImageUpdating', '1')
                     except:
-                        HOME.setProperty('DaemonFanartImageUpdating', '1')
                         log("Could not process image for cfa daemon")
+                    HOME.setProperty('DaemonFanartImageUpdating', '1')
             if not HOME.getProperty("cha_daemon_set") == 'None':
                 self.image_now_cha = xbmc.getInfoLabel("Control.GetLabel(7977)")
                 if self.image_now_cha != self.image_prev_cha:
@@ -271,51 +129,8 @@ class ColorBoxMain:
 
                         HOME.setProperty('DaemonFanartCCUpdating', '1')
                     except:
-                        HOME.setProperty('DaemonFanartCCUpdating', '1')
                         log("Could not process image for cha daemon")
-            self.image_now = xbmc.getInfoLabel("Player.Art(thumb)")
-            self.image_now_fa = xbmc.getInfoLabel("MusicPlayer.Property(Fanart_Image)")
-            if self.image_now != self.image_prev and xbmc.Player().isPlayingAudio():
-                try:
-                    self.image_prev = self.image_now
-                    image, imagecolor, cimagecolor = Filter_Image(self.image_now, self.radius)
-                    HOME.setProperty('ImageFilter1', image)
-                    HOME.setProperty("ImageColor1", imagecolor)
-                    image = Filter_Pixelate(self.image_now, self.pixels)
-                    HOME.setProperty('ImageFilter2', image)
-                    HOME.setProperty("ImageColor2", Random_Color())
-                    image = Filter_Posterize(self.image_now, self.bits)
-                    HOME.setProperty('ImageFilter3', image)
-                    HOME.setProperty("ImageColor3", Random_Color())
-                    image = Filter_Twotone(self.image_now, self.black, self.white)
-                    HOME.setProperty('ImageFilter4', image)
-                    HOME.setProperty("ImageColor4", Random_Color())
-                    image = Filter_Distort(self.image_now, self.delta_x, self.delta_y)
-                    HOME.setProperty('ImageFilter5', image)
-                    HOME.setProperty("ImageColor5", Random_Color())
-                except:
-                    log("Could not process image for f daemon")
-            if self.image_now_fa != self.image_prev_fa and xbmc.Player().isPlayingAudio():
-                try:
-                    self.image_prev_fa = self.image_now_fa
-                    image, imagecolor, cimagecolor = Filter_Image(self.image_now_fa, self.radius)
-                    HOME.setProperty('ImageFilterfa1', image)
-                    HOME.setProperty("ImageColorfa1", imagecolor)
-                    image = Filter_Pixelate(self.image_now_fa, self.pixels)
-                    HOME.setProperty('ImageFilterfa2', image)
-                    HOME.setProperty("ImageColorfa2", Random_Color())
-                    image = Filter_Posterize(self.image_now_fa, self.bits)
-                    HOME.setProperty('ImageFilterfa3', image)
-                    HOME.setProperty("ImageColorfa3", Random_Color())
-                    image = Filter_Twotone(self.image_now_fa, self.black, self.white)
-                    HOME.setProperty('ImageFilterfa4', image)
-                    HOME.setProperty("ImageColorfa4", Random_Color())
-                    image = Filter_Distort(self.image_now_fa, self.delta_x, self.delta_y)
-                    HOME.setProperty('ImageFilterfa5', image)
-                    HOME.setProperty("ImageColorfa5", Random_Color())
-                except:
-                    log("Could not process image for fa daemon")
-            xbmc.sleep(300)
+            xbmc.sleep(100)
 
     def _StartInfoActions(self):
         for info in self.infos:
@@ -324,13 +139,11 @@ class ColorBoxMain:
                 HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(HOME.getProperty(self.prefix + "ImageColor")))
             elif info == 'percentage':
                 Show_Percentage()
-            elif info == 'bluronly':
-                HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = Filter_ImageOnly(self.id, self.radius)
-                HOME.setProperty(self.prefix + 'ImageFilter', image)
+            elif info == 'ptype':
+                Pixelshift_Set_Type(self.ptype)
             elif info == 'blur':
                 HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image, imagecolor, cimagecolor = Filter_Image(self.id, self.radius)
+                image = blur(self.id, self.var1)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
                 HOME.setProperty(self.prefix + "ImageCColor", cimagecolor)
@@ -339,28 +152,28 @@ class ColorBoxMain:
                 imagecolor = Random_Color()
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
                 HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(imagecolor))
-                image = Filter_Pixelate(self.id, self.pixels)
+                image = pixelate(self.id, self.var1)
                 if image != "":
                     HOME.setProperty(self.prefix + 'ImageFilter', image)
             elif info == 'twotone':
                 HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = Filter_Twotone(self.id, self.black, self.white)
+                image = twotone(self.id, self.var1, self.var2)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
             elif info == 'posterize':
                 HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = Filter_Posterize(self.id, self.bits)
+                image = posterize(self.id, self.var1)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
             elif info == 'fakelight':
                 HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = Filter_Fakelight(self.id, self.pixels)
+                image = fakelight(self.id, self.var1)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
             elif info == 'distort':
                 HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = Filter_Distort(self.id, self.delta_x, self.delta_y)
+                image = distort(self.id, self.var1, self.var2)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
             elif info == 'shiftblock':
                 HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = Filter_Shiftblock(self.id, self.blocksize, self.sigma, self.iterations)
+                image = shiftblock(self.id, self.blocksize, self.sigma, self.iterations)
                 HOME.setProperty(self.prefix + 'ImageFilter', image)
         HOME.setProperty(self.prefix + 'ManualImageUpdating', '1')
 
@@ -370,8 +183,9 @@ class ColorBoxMain:
         self.infos = []
         self.id = ""
         self.dbid = ""
+        self.ptype = "none"
         self.prefix = ""
-        self.radius = 5
+        self.radius = 10
         self.bits = 2
         self.pixels = 20
         self.container = 518
@@ -417,27 +231,27 @@ class ColorBoxMain:
                 if not self.prefix.endswith("."):
                     self.prefix = self.prefix + "."
             elif arg.startswith('radius='):
-                self.radius = int(arg[7:])
+                self.var1 = int(arg[7:])
             elif arg.startswith('pixels='):
-                self.pixels = int(arg[7:])
+                self.var1 = int(arg[7:])
             elif arg.startswith('bits='):
-                self.bits = int(arg[5:])
+                self.var1 = int(arg[5:])
             elif arg.startswith('black='):
-                self.black = RemoveQuotes(arg[6:])
+                self.var1 = RemoveQuotes(arg[6:])
             elif arg.startswith('white='):
-                self.white = RemoveQuotes(arg[6:])
+                self.var2 = RemoveQuotes(arg[6:])
             elif arg.startswith('delta_x='):
-                self.delta_x = int(arg[8:])
+                self.var1 = int(arg[8:])
             elif arg.startswith('delta_y='):
-                self.delta_y = int(arg[8:])
+                self.var2 = int(arg[8:])
             elif arg.startswith('blocksize='):
-                self.blocksize = int(arg[10:])
+                self.var1 = int(arg[10:])
             elif arg.startswith('sigma='):
-                self.sigma = int(arg[6:])
+                self.var2 = int(arg[6:])
             elif arg.startswith('iterations='):
-                self.iterations = int(arg[11:])
-            elif arg.startswith('container='):
-                self.container = RemoveQuotes(arg[10:])
+                self.var3 = int(arg[11:])
+            elif arg.startswith('ptype='):
+                self.ptype = arg[6:]
 
 class ColorBoxMonitor(xbmc.Monitor):
 
@@ -448,7 +262,7 @@ class ColorBoxMonitor(xbmc.Monitor):
         pass
         # HOME.clearProperty(self.prefix + 'ImageFilter')
         # Notify("test", "test")
-        # image, imagecolor, cimagecolor = Filter_Image(self.id, self.radius)
+        # image, imagecolor, cimagecolor = Filter_blur(self.id, self.radius)
         # HOME.setProperty(self.prefix + 'ImageFilter', image)
         # HOME.setProperty(self.prefix + "ImageColor", imagecolor)
 
