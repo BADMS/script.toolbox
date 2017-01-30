@@ -78,45 +78,32 @@ class ColorBoxMain:
                 elif self.image_now_cpa == '' and HOME.getProperty("cpa_daemon_fallback") != '':
                     self.image_now_cpa = HOME.getProperty("cpa_daemon_fallback")
                 if self.image_now_cpa != self.image_prev_cpa:
-                    HOME.setProperty('DaemonPosterImageUpdating', '0')
                     try:
                         self.image_prev_cpa = self.image_now_cpa
                         HOME.setProperty("OldImageColorcpa", HOME.getProperty("ImageColorcpa"))
                         HOME.setProperty("OldImageCColorcpa", HOME.getProperty("ImageCColorcpa"))
-
-
+                        HOME.setProperty('DaemonPosterImageUpdating', '0')
                         HOME.setProperty('ImageFiltercpa', ColorBox_function_map[cpa_daemon_set](self.image_now_cpa))
-
-                        Color_Only(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa")
-
-
                         HOME.setProperty('Imagecpa', self.image_now_cpa)
-                            
+                        HOME.setProperty('DaemonPosterImageUpdating', '1')
+                        Color_Only(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa")
                     except:
                         log("Could not process image for cfa daemon")
-
-                    HOME.setProperty('DaemonPosterImageUpdating', '1')
-
             cfa_daemon_set = HOME.getProperty("cfa_daemon_set")
             #curr_window = xbmc.getInfoLabel("Window.Property(xmlfile)")
             if not cfa_daemon_set == 'None':
                 self.image_now_cfa = xbmc.getInfoLabel("ListItem.Art(fanart)")
                 if self.image_now_cfa != self.image_prev_cfa:
-                    HOME.setProperty('DaemonFanartImageUpdating', '0')
                     try:
                         self.image_prev_cfa = self.image_now_cfa
                         HOME.setProperty("OldImageColorcfa", HOME.getProperty("ImageColorcfa"))
                         HOME.setProperty("OldImageCColorcfa", HOME.getProperty("ImageCColorcfa"))
-
-
+                        HOME.setProperty('DaemonFanartImageUpdating', '0')
                         HOME.setProperty('ImageFiltercfa', ColorBox_function_map[cfa_daemon_set](self.image_now_cfa))
-
+                        HOME.setProperty('DaemonFanartImageUpdating', '1')
                         Color_Only(self.image_now_cfa, "ImageColorcfa", "ImageCColorcfa")
-
-
                     except:
                         log("Could not process image for cfa daemon")
-                    HOME.setProperty('DaemonFanartImageUpdating', '1')
             if not HOME.getProperty("cha_daemon_set") == 'None':
                 self.image_now_cha = xbmc.getInfoLabel("Control.GetLabel(7977)")
                 if self.image_now_cha != self.image_prev_cha:
@@ -125,9 +112,8 @@ class ColorBoxMain:
                         HOME.setProperty("OldImageColorcha", HOME.getProperty("ImageColorcha"))
                         HOME.setProperty("OldImageCColorcha", HOME.getProperty("ImageCColorcha"))
                         HOME.setProperty('DaemonFanartCCUpdating', '0')
-                        Color_Only(self.image_now_cha, "ImageColorcha", "ImageCColorcha")
-
                         HOME.setProperty('DaemonFanartCCUpdating', '1')
+                        Color_Only(self.image_now_cha, "ImageColorcha", "ImageCColorcha")
                     except:
                         log("Could not process image for cha daemon")
             xbmc.sleep(100)
@@ -141,41 +127,13 @@ class ColorBoxMain:
                 Show_Percentage()
             elif info == 'ptype':
                 Pixelshift_Set_Type(self.ptype)
-            elif info == 'blur':
+            elif info != '':
                 HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = blur(self.id, self.var1)
-                HOME.setProperty(self.prefix + 'ImageFilter', image)
+                HOME.setProperty(self.prefix + 'ImageFilter', ColorBox_function_map[info](self.id))                
+                HOME.setProperty(self.prefix + 'ManualImageUpdating', '1')
+                imagecolor, cimagecolor = Color_Only_Manual(self.id)
                 HOME.setProperty(self.prefix + "ImageColor", imagecolor)
                 HOME.setProperty(self.prefix + "ImageCColor", cimagecolor)
-            elif info == 'pixelate':
-                HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                imagecolor = Random_Color()
-                HOME.setProperty(self.prefix + "ImageColor", imagecolor)
-                HOME.setProperty(self.prefix + "ImageCColor", Complementary_Color(imagecolor))
-                image = pixelate(self.id, self.var1)
-                if image != "":
-                    HOME.setProperty(self.prefix + 'ImageFilter', image)
-            elif info == 'twotone':
-                HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = twotone(self.id, self.var1, self.var2)
-                HOME.setProperty(self.prefix + 'ImageFilter', image)
-            elif info == 'posterize':
-                HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = posterize(self.id, self.var1)
-                HOME.setProperty(self.prefix + 'ImageFilter', image)
-            elif info == 'fakelight':
-                HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = fakelight(self.id, self.var1)
-                HOME.setProperty(self.prefix + 'ImageFilter', image)
-            elif info == 'distort':
-                HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = distort(self.id, self.var1, self.var2)
-                HOME.setProperty(self.prefix + 'ImageFilter', image)
-            elif info == 'shiftblock':
-                HOME.setProperty(self.prefix + 'ManualImageUpdating', '0')
-                image = shiftblock(self.id, self.blocksize, self.sigma, self.iterations)
-                HOME.setProperty(self.prefix + 'ImageFilter', image)
-        HOME.setProperty(self.prefix + 'ManualImageUpdating', '1')
 
     def _init_vars(self):
         self.window = xbmcgui.Window(10000)  # Home Window

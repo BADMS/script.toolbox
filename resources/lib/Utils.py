@@ -50,7 +50,7 @@ bits=1
 
 def Pixelshift_Set_Type(stype):
     global ptype
-    ptype = stype
+    ptype = str(stype)
 
 def Random_Color():
     return "ff" + "%06x" % random.randint(0, 0xFFFFFF)
@@ -97,7 +97,7 @@ def Show_Percentage():
     return
 
 
-def Color_Only(filterimage, var1, var2):
+def Color_Only(filterimage, cname, ccname):
     md5 = hashlib.md5(filterimage).hexdigest()
     if not colors_dict:
         try:
@@ -151,10 +151,60 @@ def Color_Only(filterimage, var1, var2):
                 file.write(':'.join([id] + values.split(':')) + '\n')
     else:
         imagecolor, cimagecolor = colors_dict[md5].split(':')
-    var3 = 'Old' + var1
-    var4 = 'Old' + var2
-    linear_gradient(var1, HOME.getProperty(var3)[2:8], imagecolor[2:8], 100)
-    linear_gradient(var2, HOME.getProperty(var4)[2:8], cimagecolor[2:8], 100)
+    var3 = 'Old' + cname
+    var4 = 'Old' + ccname
+    linear_gradient(cname, HOME.getProperty(var3)[2:8], imagecolor[2:8], 20)
+    linear_gradient(ccname, HOME.getProperty(var4)[2:8], cimagecolor[2:8], 20)
+
+    return imagecolor, cimagecolor
+
+
+def Color_Only_Manual(filterimage, cname, ccname):
+    md5 = hashlib.md5(filterimage).hexdigest()
+    if not colors_dict:
+        try:
+            with open(ADDON_COLORS) as file:
+                for line in file:
+                    a, b, c = line.strip().split(':')
+                    global colors_dict
+                    colors_dict[a] = b + ':' + c
+        except:
+            log ("no colors.txt yet")
+    if md5 not in colors_dict:
+        filename = md5 + ".png"
+        targetfile = os.path.join(ADDON_DATA_PATH, filename)
+        if not xbmcvfs.exists(targetfile):
+            cachedthumb = xbmc.getCacheThumbName(filterimage)
+            xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
+            xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
+            img = None
+            for i in range(1, 4):
+                try:
+                    if xbmcvfs.exists(xbmc_cache_file):
+                        
+                        img = Image.open(xbmc.translatePath(xbmc_cache_file))
+                        break
+                    elif xbmcvfs.exists(xbmc_vid_cache_file):
+                        
+                        img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
+                        break
+                    else:
+                        filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
+                        if filterimage.endswith("/"):
+                            filterimage = filterimage[:-1]
+                        
+                        xbmcvfs.copy(filterimage, targetfile)
+                        img = Image.open(targetfile)
+                        break
+                except:
+                    xbmc.sleep(200)
+            if not img:
+                return "", ""
+            img.thumbnail((200, 200))
+            img = img.convert('RGB')
+        else:
+            img = Image.open(targetfile)
+        imagecolor, cimagecolor = Get_Colors(img, md5)
 
     return imagecolor, cimagecolor
 
@@ -451,6 +501,8 @@ def distort(filterimage):
                 xbmc.sleep(100)
         if not img:
             return ""
+        img.thumbnail((400, 400), Image.ANTIALIAS)
+        img = img.convert('RGB')
         img = image_distort(img,delta_x,delta_y)
         img.save(targetfile)
     return targetfile
@@ -506,7 +558,7 @@ def clamp(x):
     return max(0, min(x, 255))
 
 
-def linear_gradient(var1, start_hex="000000", finish_hex="FFFFFF", n=10, sleep=0.005):
+def linear_gradient(cname, start_hex="000000", finish_hex="FFFFFF", n=10, sleep=0.005):
     ''' returns a gradient list of (n) colors between
     two hex colors. start_hex and finish_hex
     should be the full six-digit color string,
@@ -526,7 +578,7 @@ def linear_gradient(var1, start_hex="000000", finish_hex="FFFFFF", n=10, sleep=0
             for j in range(3)
         ]
         # Add it to our list of output colors
-        HOME.setProperty(var1, RGB_to_hex(curr_vector))
+        HOME.setProperty(cname, RGB_to_hex(curr_vector))
         time.sleep(sleep)
     return
 
