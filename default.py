@@ -21,7 +21,12 @@ ColorBox_function_map = {
         'blur': blur,
         'pixelate': pixelate,
         'shiftblock': shiftblock,
-        'pixelshift': pixelshift,
+        'pixelnone': pixelnone,
+        'pixelwaves': pixelwaves,
+        'pixelrandom': pixelrandom,
+        'pixelfile': pixelfile,
+        'pixelfedges': pixelfedges,
+        'pixeledges': pixeledges,
         'fakelight': fakelight,
         'twotone': twotone,
         'posterize': posterize,
@@ -111,8 +116,8 @@ class ColorBoxMain:
                         self.image_prev_cha = self.image_now_cha
                         HOME.setProperty("OldImageColorcha", HOME.getProperty("ImageColorcha"))
                         HOME.setProperty("OldImageCColorcha", HOME.getProperty("ImageCColorcha"))
-                        HOME.setProperty('DaemonFanartCCUpdating', '0')
-                        HOME.setProperty('DaemonFanartCCUpdating', '1')
+                        #HOME.setProperty('DaemonFanartCCUpdating', '0')
+                        #HOME.setProperty('DaemonFanartCCUpdating', '1')
                         Color_Only(self.image_now_cha, "ImageColorcha", "ImageCColorcha")
                     except:
                         log("Could not process image for cha daemon")

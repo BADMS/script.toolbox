@@ -37,7 +37,7 @@ pixelsize=20
 blockSize=192
 sigma=0.05
 iterations=1920
-ptype="none"
+
 pthreshold=100
 pclength=50
 pangle=00
@@ -316,7 +316,21 @@ def shiftblock(filterimage):
     return targetfile
 
 
-def pixelshift(filterimage):
+def pixelnone(filterimage):
+    return pixelshift(filterimage, "none")
+def pixelwaves(filterimage):
+    return pixelshift(filterimage, "waves")
+def pixelrandom(filterimage):
+    return pixelshift(filterimage, "random")
+def pixelfile(filterimage):
+    return pixelshift(filterimage, "file")
+def pixelfedges(filterimage):
+    return pixelshift(filterimage, "fedges")
+def pixeledges(filterimage):
+    return pixelshift(filterimage, "edges")
+
+
+def pixelshift(filterimage, ptype="none"):
     """stype; 1=random, 2=edges, 3=waves, 4=file, 5=file_edges, 0=none"""
     md5 = hashlib.md5(filterimage).hexdigest()
     filename = md5 + "pixelshift" + str(ptype) + str(pthreshold) + str(pclength) + str(pangle) + str(prandomness) + ".png"
