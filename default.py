@@ -4,6 +4,7 @@ import xbmc
 import xbmcgui
 import xbmcaddon
 import xbmcvfs
+from threading import Thread
 
 ADDON = xbmcaddon.Addon()
 ADDON_VERSION = ADDON.getAddonInfo('version')
@@ -91,7 +92,8 @@ class ColorBoxMain:
                         HOME.setProperty('ImageFiltercpa', ColorBox_function_map[cpa_daemon_set](self.image_now_cpa))
                         HOME.setProperty('Imagecpa', self.image_now_cpa)
                         HOME.setProperty('DaemonPosterImageUpdating', '1')
-                        Color_Only(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa")
+                        t = Thread(target=Color_Only, args=(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa"))
+                        t.start()
                     except:
                         log("Could not process image for cfa daemon")
             cfa_daemon_set = HOME.getProperty("cfa_daemon_set")
@@ -106,7 +108,8 @@ class ColorBoxMain:
                         HOME.setProperty('DaemonFanartImageUpdating', '0')
                         HOME.setProperty('ImageFiltercfa', ColorBox_function_map[cfa_daemon_set](self.image_now_cfa))
                         HOME.setProperty('DaemonFanartImageUpdating', '1')
-                        Color_Only(self.image_now_cfa, "ImageColorcfa", "ImageCColorcfa")
+                        t = Thread(target=Color_Only, args=(self.image_now_cfa, "ImageColorcfa", "ImageCColorcfa"))
+                        t.start()
                     except:
                         log("Could not process image for cfa daemon")
             if not HOME.getProperty("cha_daemon_set") == 'None':
@@ -118,7 +121,8 @@ class ColorBoxMain:
                         HOME.setProperty("OldImageCColorcha", HOME.getProperty("ImageCColorcha"))
                         #HOME.setProperty('DaemonFanartCCUpdating', '0')
                         #HOME.setProperty('DaemonFanartCCUpdating', '1')
-                        Color_Only(self.image_now_cha, "ImageColorcha", "ImageCColorcha")
+                        t = Thread(target=Color_Only, args=(self.image_now_cha, "ImageColorcha", "ImageCColorcha"))
+                        t.start()
                     except:
                         log("Could not process image for cha daemon")
             xbmc.sleep(100)
