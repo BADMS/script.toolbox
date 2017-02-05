@@ -1,5 +1,4 @@
 import os, sys
-import hashlib
 import xbmc
 import xbmcgui
 import xbmcaddon
@@ -51,8 +50,12 @@ class ColorBoxMain:
         HOME.setProperty("ImageCColorcfa", "FF000000")
         HOME.setProperty("OldImageColorcha", "FF000000")
         HOME.setProperty("ImageColorcha", "FF000000")
+        HOME.setProperty("OldImageColorcsa", "FF000000")
+        HOME.setProperty("ImageColorcsa", "FF000000")
         HOME.setProperty("OldImageCColorcha", "FF000000")
         HOME.setProperty("ImageCColorcha", "FF000000")
+        HOME.setProperty("OldImageCColorcsa", "FF000000")
+        HOME.setProperty("ImageCColorcsa", "FF000000")
         if not xbmcvfs.exists(ADDON_DATA_PATH):
             # addon data path does not exist...create it
             xbmcvfs.mkdir(ADDON_DATA_PATH)
@@ -125,6 +128,19 @@ class ColorBoxMain:
                         t.start()
                     except:
                         log("Could not process image for cha daemon")
+            if xbmc.getCondVisibility('Skin.HasSetting(ColorBox_Enable_7978)'):
+                self.image_now_csa = xbmc.getInfoLabel("Control.GetLabel(7978)")
+                if self.image_now_csa != self.image_prev_csa:
+                    try:
+                        self.image_prev_csa = self.image_now_csa
+                        HOME.setProperty("OldImageColorcsa", HOME.getProperty("ImageColorcsa"))
+                        HOME.setProperty("OldImageCColorcsa", HOME.getProperty("ImageCColorcsa"))
+                        #HOME.setProperty('DaemonFanartCCUpdating', '0')
+                        #HOME.setProperty('DaemonFanartCCUpdating', '1')
+                        t = Thread(target=Color_Only, args=(self.image_now_csa, "ImageColorcsa", "ImageCColorcsa"))
+                        t.start()
+                    except:
+                        log("Could not process image for cha daemon")
             xbmc.sleep(100)
 
     def _StartInfoActions(self):
@@ -170,12 +186,14 @@ class ColorBoxMain:
         self.image_now_cfa = ""
         self.image_now_cpa = ""
         self.image_now_cha = ""
+        self.image_now_csa = ""
         self.show_prev = ""
         self.image_prev = ""
         self.image_prev_fa = ""
         self.image_prev_cfa = ""
         self.image_prev_cpa = ""
         self.image_prev_cha = ""
+        self.image_prev_csa = ""
         self.show_watched = ""
         self.autoclose = ""
 
