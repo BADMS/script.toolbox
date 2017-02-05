@@ -71,22 +71,8 @@ class ColorBoxMain:
                 Show_Percentage()
             cpa_daemon_set = HOME.getProperty("cpa_daemon_set")
             if not cpa_daemon_set == 'None':
-                self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(poster)")
-                if xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,episode)"):
-                    self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(thumb)")
-                if xbmc.getCondVisibility("Window.IsActive(movieinformation)") and xbmc.getCondVisibility("String.IsEqual(ListItem.DBTYPE,episode)"):
-                    self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(poster)")
-                if self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(season.poster)") != '':
-                    self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(season.poster)")
-                elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(tvshow.poster)") != '':
-                    self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(tvshow.poster)")
-                elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Art(thumb)") != '':
-                    self.image_now_cpa = xbmc.getInfoLabel("ListItem.Art(thumb)")
-                elif self.image_now_cpa == '' and xbmc.getInfoLabel("ListItem.Icon") != '':
-                    self.image_now_cpa = xbmc.getInfoLabel("ListItem.Icon")
-                elif self.image_now_cpa == '' and HOME.getProperty("cpa_daemon_fallback") != '':
-                    self.image_now_cpa = HOME.getProperty("cpa_daemon_fallback")
-                if self.image_now_cpa != self.image_prev_cpa:
+                self.image_now_cpa = xbmc.getInfoLabel("Control.GetLabel(7975)")
+                if self.image_now_cpa != self.image_prev_cpa and self.image_now_cpa != "":
                     try:
                         self.image_prev_cpa = self.image_now_cpa
                         HOME.setProperty("OldImageColorcpa", HOME.getProperty("ImageColorcpa"))
@@ -95,15 +81,15 @@ class ColorBoxMain:
                         HOME.setProperty('ImageFiltercpa', ColorBox_function_map[cpa_daemon_set](self.image_now_cpa))
                         HOME.setProperty('Imagecpa', self.image_now_cpa)
                         HOME.setProperty('DaemonPosterImageUpdating', '1')
-                        t = Thread(target=Color_Only, args=(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa"))
-                        t.start()
+                        tm1 = Thread(target=Color_Only, args=(self.image_now_cpa, "ImageColorcpa", "ImageCColorcpa"))
+                        tm1.start()
                     except:
                         log("Could not process image for cfa daemon")
             cfa_daemon_set = HOME.getProperty("cfa_daemon_set")
             #curr_window = xbmc.getInfoLabel("Window.Property(xmlfile)")
             if not cfa_daemon_set == 'None':
                 self.image_now_cfa = xbmc.getInfoLabel("ListItem.Art(fanart)")
-                if self.image_now_cfa != self.image_prev_cfa:
+                if self.image_now_cfa != self.image_prev_cfa and self.image_now_cfa != "":
                     try:
                         self.image_prev_cfa = self.image_now_cfa
                         HOME.setProperty("OldImageColorcfa", HOME.getProperty("ImageColorcfa"))
@@ -111,37 +97,37 @@ class ColorBoxMain:
                         HOME.setProperty('DaemonFanartImageUpdating', '0')
                         HOME.setProperty('ImageFiltercfa', ColorBox_function_map[cfa_daemon_set](self.image_now_cfa))
                         HOME.setProperty('DaemonFanartImageUpdating', '1')
-                        t = Thread(target=Color_Only, args=(self.image_now_cfa, "ImageColorcfa", "ImageCColorcfa"))
-                        t.start()
+                        tf = Thread(target=Color_Only, args=(self.image_now_cfa, "ImageColorcfa", "ImageCColorcfa"))
+                        tf.start()
                     except:
                         log("Could not process image for cfa daemon")
             if not HOME.getProperty("cha_daemon_set") == 'None':
                 self.image_now_cha = xbmc.getInfoLabel("Control.GetLabel(7977)")
-                if self.image_now_cha != self.image_prev_cha:
+                if self.image_now_cha != self.image_prev_cha and self.image_now_cha != "":
                     try:
                         self.image_prev_cha = self.image_now_cha
                         HOME.setProperty("OldImageColorcha", HOME.getProperty("ImageColorcha"))
                         HOME.setProperty("OldImageCColorcha", HOME.getProperty("ImageCColorcha"))
                         #HOME.setProperty('DaemonFanartCCUpdating', '0')
                         #HOME.setProperty('DaemonFanartCCUpdating', '1')
-                        t = Thread(target=Color_Only, args=(self.image_now_cha, "ImageColorcha", "ImageCColorcha"))
-                        t.start()
+                        tm3 = Thread(target=Color_Only, args=(self.image_now_cha, "ImageColorcha", "ImageCColorcha"))
+                        tm3.start()
                     except:
                         log("Could not process image for cha daemon")
             if xbmc.getCondVisibility('Skin.HasSetting(ColorBox_Enable_7978)'):
                 self.image_now_csa = xbmc.getInfoLabel("Control.GetLabel(7978)")
-                if self.image_now_csa != self.image_prev_csa:
+                if self.image_now_csa != self.image_prev_csa and self.image_now_csa != "":
                     try:
                         self.image_prev_csa = self.image_now_csa
                         HOME.setProperty("OldImageColorcsa", HOME.getProperty("ImageColorcsa"))
                         HOME.setProperty("OldImageCColorcsa", HOME.getProperty("ImageCColorcsa"))
                         #HOME.setProperty('DaemonFanartCCUpdating', '0')
                         #HOME.setProperty('DaemonFanartCCUpdating', '1')
-                        t = Thread(target=Color_Only, args=(self.image_now_csa, "ImageColorcsa", "ImageCColorcsa"))
-                        t.start()
+                        tm4 = Thread(target=Color_Only, args=(self.image_now_csa, "ImageColorcsa", "ImageCColorcsa"))
+                        tm4.start()
                     except:
                         log("Could not process image for cha daemon")
-            xbmc.sleep(100)
+            xbmc.sleep(200)
 
     def _StartInfoActions(self):
         for info in self.infos:
