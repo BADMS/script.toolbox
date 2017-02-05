@@ -41,7 +41,7 @@ class ColorBoxMain:
         self._init_vars()
         self._parse_argv()
         HOME.setProperty("OldImageColorcpa", "FF000000")
-        HOME.setProperty("ImageColorcpa", "FF000000")
+        HOME.setProperty("ImageColorcpa", "FFffffff")
         HOME.setProperty("OldImageCColorcpa", "FF000000")
         HOME.setProperty("ImageCColorcpa", "FF000000")
         HOME.setProperty("OldImageColorcfa", "FF000000")
