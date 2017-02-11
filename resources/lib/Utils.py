@@ -153,8 +153,9 @@ def Color_Only(filterimage, cname, ccname):
         imagecolor, cimagecolor = colors_dict[md5].split(':')
     var3 = 'Old' + cname
     var4 = 'Old' + ccname
-    linear_gradient(cname, HOME.getProperty(var3)[2:8], imagecolor[2:8], 20)
-    linear_gradient(ccname, HOME.getProperty(var4)[2:8], cimagecolor[2:8], 20)
+
+    linear_gradient(cname, HOME.getProperty(var3)[2:8], imagecolor[2:8], 50, 0.01, var3)
+    linear_gradient(ccname, HOME.getProperty(var4)[2:8], cimagecolor[2:8], 50, 0.01, var4)
 
     return imagecolor, cimagecolor
 
@@ -572,7 +573,7 @@ def clamp(x):
     return max(0, min(x, 255))
 
 
-def linear_gradient(cname, start_hex="000000", finish_hex="FFFFFF", n=10, sleep=0.005):
+def linear_gradient(cname, start_hex="000000", finish_hex="FFFFFF", n=10, sleep=0.005, _thread_check=""):
     ''' returns a gradient list of (n) colors between
     two hex colors. start_hex and finish_hex
     should be the full six-digit color string,
@@ -593,6 +594,8 @@ def linear_gradient(cname, start_hex="000000", finish_hex="FFFFFF", n=10, sleep=
         ]
         # Add it to our list of output colors
         HOME.setProperty(cname, RGB_to_hex(curr_vector))
+        if HOME.getProperty(_thread_check)[2:8] != start_hex:
+            thread.exit()
         time.sleep(sleep)
     return
 
